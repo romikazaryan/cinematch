@@ -1,0 +1,85 @@
+// src/App.jsx
+import React, { useState } from 'react';
+import { Provider } from 'react-redux';
+import { store } from './app/store';
+import { useTelegram } from './hooks/useTelegram';
+import SearchBar from './components/search/SearchBar';
+import MovieList from './components/movies/MovieList/MovieList';
+import { useMovieSearch } from './hooks/useMovieSearch';
+
+function AppContent() {
+  const { colorScheme, sendToBot } = useTelegram();
+  const [searchQuery, setSearchQuery] = useState('');
+  const { movies, loading, error, page, totalPages, setPage } = useMovieSearch(searchQuery);
+
+  const handleMovieSelect = (movie) => {
+    sendToBot({
+      type: 'MOVIE_SELECTED',
+      payload: {
+        id: movie.id,
+        title: movie.title || movie.name,
+        type: movie.media_type,
+        year: new Date(movie.release_date || movie.first_air_date).getFullYear(),
+        rating: movie.vote_average
+      }
+    });
+  };
+
+  return (
+    <div className={`min-h-screen p-4 ${colorScheme}`}>
+      <SearchBar 
+        value={searchQuery}
+        onChange={setSearchQuery}
+      />
+      
+      {loading ? (
+        <div className="flex justify-center">
+          <span className="animate-spin">🔄</span>
+        </div>
+      ) : error ? (
+        <div className="text-red-500 text-center">
+          {error}
+        </div>
+      ) : (
+        <>
+          <MovieList 
+            movies={movies}
+            onMovieSelect={handleMovieSelect}
+          />
+          
+          {totalPages > 1 && (
+            <div className="mt-4 flex justify-center gap-2">
+              <button
+                onClick={() => setPage(p => Math.max(1, p - 1))}
+                disabled={page === 1}
+                className="px-4 py-2 bg-blue-500 text-white rounded disabled:opacity-50"
+              >
+                Назад
+              </button>
+              <span className="px-4 py-2">
+                {page} из {totalPages}
+              </span>
+              <button
+                onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+                disabled={page === totalPages}
+                className="px-4 py-2 bg-blue-500 text-white rounded disabled:opacity-50"
+              >
+                Вперед
+              </button>
+            </div>
+          )}
+        </>
+      )}
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <Provider store={store}>
+      <AppContent />
+    </Provider>
+  );
+}
+
+export default App;
