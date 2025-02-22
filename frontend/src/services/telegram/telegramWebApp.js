@@ -1,4 +1,4 @@
-const WEB_APP_URL = 'https://cinematch-7mj1c4710-romiks-projects-f2369c35.vercel.app'
+const WEB_APP_URL = 'https://cinematch-kappa.vercel.app'
 
 class TelegramWebApp {
   constructor() {

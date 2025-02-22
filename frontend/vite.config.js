@@ -17,7 +17,7 @@ export default defineConfig({
   server: {
     port: 3000,
     strictPort: true,
-    host: true,
-    allowedHosts: ['https://cinematch-7mj1c4710-romiks-projects-f2369c35.vercel.app'], // Добавляем разрешенный хост
-  }
+    host: true
+  },
+  base: '/' // Добавляем эту строку для корректной работы маршрутизации
 })
