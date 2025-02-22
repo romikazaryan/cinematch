@@ -1,0 +1,7 @@
+python-telegram-bot==20.7
+python-dotenv==1.0.0
+fuzzywuzzy==0.18.0
+python-Levenshtein==0.25.0
+tmdbsimple==2.9.1
+transformers==4.36.2
+torch==2.2.0

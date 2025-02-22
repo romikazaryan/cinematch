@@ -1,0 +1,499 @@
+2025-02-21 23:07:10,171 - __main__ - ERROR - TMDB_API_KEY environment variable is not set.
+2025-02-21 23:22:06,690 - __main__ - ERROR - TMDB_API_KEY environment variable is not set.
+2025-02-21 23:26:05,620 - __main__ - INFO - Bot started
+2025-02-21 23:26:06,773 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot7545280520:AAErxnVvydkO23rSl0QtkudXiNVF9dHZm40/getMe "HTTP/1.1 200 OK"
+2025-02-21 23:26:06,917 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot7545280520:AAErxnVvydkO23rSl0QtkudXiNVF9dHZm40/deleteWebhook "HTTP/1.1 200 OK"
+2025-02-21 23:26:06,920 - telegram.ext.Application - INFO - Application started
+2025-02-21 23:26:17,909 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot7545280520:AAErxnVvydkO23rSl0QtkudXiNVF9dHZm40/getUpdates "HTTP/1.1 200 OK"
+2025-02-21 23:26:28,108 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot7545280520:AAErxnVvydkO23rSl0QtkudXiNVF9dHZm40/getUpdates "HTTP/1.1 200 OK"
+2025-02-21 23:26:38,349 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot7545280520:AAErxnVvydkO23rSl0QtkudXiNVF9dHZm40/getUpdates "HTTP/1.1 200 OK"
+2025-02-21 23:26:48,588 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot7545280520:AAErxnVvydkO23rSl0QtkudXiNVF9dHZm40/getUpdates "HTTP/1.1 200 OK"
+2025-02-21 23:26:58,827 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot7545280520:AAErxnVvydkO23rSl0QtkudXiNVF9dHZm40/getUpdates "HTTP/1.1 200 OK"
+2025-02-21 23:27:08,977 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot7545280520:AAErxnVvydkO23rSl0QtkudXiNVF9dHZm40/getUpdates "HTTP/1.1 200 OK"
+2025-02-21 23:27:19,124 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot7545280520:AAErxnVvydkO23rSl0QtkudXiNVF9dHZm40/getUpdates "HTTP/1.1 200 OK"
+2025-02-21 23:27:29,273 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot7545280520:AAErxnVvydkO23rSl0QtkudXiNVF9dHZm40/getUpdates "HTTP/1.1 200 OK"
+2025-02-21 23:27:39,480 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot7545280520:AAErxnVvydkO23rSl0QtkudXiNVF9dHZm40/getUpdates "HTTP/1.1 200 OK"
+2025-02-21 23:27:49,633 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot7545280520:AAErxnVvydkO23rSl0QtkudXiNVF9dHZm40/getUpdates "HTTP/1.1 200 OK"
+2025-02-21 23:31:02,762 - __main__ - INFO - Bot started
+2025-02-21 23:31:03,799 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot7545280520:AAErxnVvydkO23rSl0QtkudXiNVF9dHZm40/getMe "HTTP/1.1 200 OK"
+2025-02-21 23:31:03,946 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot7545280520:AAErxnVvydkO23rSl0QtkudXiNVF9dHZm40/deleteWebhook "HTTP/1.1 200 OK"
+2025-02-21 23:31:03,949 - telegram.ext.Application - INFO - Application started
+2025-02-21 23:31:14,939 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot7545280520:AAErxnVvydkO23rSl0QtkudXiNVF9dHZm40/getUpdates "HTTP/1.1 200 OK"
+2025-02-21 23:31:25,161 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot7545280520:AAErxnVvydkO23rSl0QtkudXiNVF9dHZm40/getUpdates "HTTP/1.1 200 OK"
+2025-02-21 23:31:32,457 - telegram.ext.Updater - ERROR - Error while getting Updates: httpx.RemoteProtocolError: Server disconnected without sending a response.
+2025-02-21 23:31:32,459 - telegram.ext.Application - ERROR - No error handlers are registered, logging exception.
+Traceback (most recent call last):
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/httpx/_transports/default.py", line 66, in map_httpcore_exceptions
+    yield
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/httpx/_transports/default.py", line 366, in handle_async_request
+    resp = await self._pool.handle_async_request(req)
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/httpcore/_async/connection_pool.py", line 256, in handle_async_request
+    raise exc from None
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/httpcore/_async/connection_pool.py", line 236, in handle_async_request
+    response = await connection.handle_async_request(
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/httpcore/_async/connection.py", line 103, in handle_async_request
+    return await self._connection.handle_async_request(request)
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/httpcore/_async/http11.py", line 136, in handle_async_request
+    raise exc
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/httpcore/_async/http11.py", line 106, in handle_async_request
+    ) = await self._receive_response_headers(**kwargs)
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/httpcore/_async/http11.py", line 177, in _receive_response_headers
+    event = await self._receive_event(timeout=timeout)
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/httpcore/_async/http11.py", line 231, in _receive_event
+    raise RemoteProtocolError(msg)
+httpcore.RemoteProtocolError: Server disconnected without sending a response.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/telegram/request/_httpxrequest.py", line 268, in do_request
+    res = await self._client.request(
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/httpx/_client.py", line 1530, in request
+    return await self.send(request, auth=auth, follow_redirects=follow_redirects)
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/httpx/_client.py", line 1617, in send
+    response = await self._send_handling_auth(
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/httpx/_client.py", line 1645, in _send_handling_auth
+    response = await self._send_handling_redirects(
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/httpx/_client.py", line 1682, in _send_handling_redirects
+    response = await self._send_single_request(request)
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/httpx/_client.py", line 1719, in _send_single_request
+    response = await transport.handle_async_request(request)
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/httpx/_transports/default.py", line 366, in handle_async_request
+    resp = await self._pool.handle_async_request(req)
+  File "/Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/contextlib.py", line 135, in __exit__
+    self.gen.throw(type, value, traceback)
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/httpx/_transports/default.py", line 83, in map_httpcore_exceptions
+    raise mapped_exc(message) from exc
+httpx.RemoteProtocolError: Server disconnected without sending a response.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/telegram/ext/_updater.py", line 688, in _network_loop_retry
+    if not await action_cb():
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/telegram/ext/_updater.py", line 384, in polling_action_cb
+    raise exc
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/telegram/ext/_updater.py", line 373, in polling_action_cb
+    updates = await self.bot.get_updates(
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/telegram/ext/_extbot.py", line 558, in get_updates
+    updates = await super().get_updates(
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/telegram/_bot.py", line 525, in decorator
+    result = await func(self, *args, **kwargs)  # skipcq: PYL-E1102
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/telegram/_bot.py", line 3584, in get_updates
+    await self._post(
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/telegram/_bot.py", line 613, in _post
+    return await self._do_post(
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/telegram/ext/_extbot.py", line 340, in _do_post
+    return await super()._do_post(
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/telegram/_bot.py", line 641, in _do_post
+    return await request.post(
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/telegram/request/_baserequest.py", line 200, in post
+    result = await self._request_wrapper(
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/telegram/request/_baserequest.py", line 340, in _request_wrapper
+    raise exc
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/telegram/request/_baserequest.py", line 330, in _request_wrapper
+    code, payload = await self.do_request(
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/telegram/request/_httpxrequest.py", line 292, in do_request
+    raise NetworkError(f"httpx.{err.__class__.__name__}: {err}") from err
+telegram.error.NetworkError: httpx.RemoteProtocolError: Server disconnected without sending a response.
+2025-02-21 23:31:44,811 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot7545280520:AAErxnVvydkO23rSl0QtkudXiNVF9dHZm40/getUpdates "HTTP/1.1 200 OK"
+2025-02-21 23:31:54,994 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot7545280520:AAErxnVvydkO23rSl0QtkudXiNVF9dHZm40/getUpdates "HTTP/1.1 200 OK"
+2025-02-21 23:32:05,152 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot7545280520:AAErxnVvydkO23rSl0QtkudXiNVF9dHZm40/getUpdates "HTTP/1.1 200 OK"
+2025-02-21 23:32:11,576 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot7545280520:AAErxnVvydkO23rSl0QtkudXiNVF9dHZm40/getUpdates "HTTP/1.1 200 OK"
+2025-02-21 23:32:11,580 - telegram.ext.Application - INFO - Application is stopping. This might take a moment.
+2025-02-21 23:32:11,580 - telegram.ext.Application - INFO - Application.stop() complete
+2025-02-21 23:43:38,927 - __main__ - INFO - Bot started
+2025-02-21 23:43:39,968 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/getMe "HTTP/1.1 200 OK"
+2025-02-21 23:43:40,117 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/deleteWebhook "HTTP/1.1 200 OK"
+2025-02-21 23:43:40,121 - telegram.ext.Application - INFO - Application started
+2025-02-21 23:43:51,151 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/getUpdates "HTTP/1.1 200 OK"
+2025-02-21 23:44:01,492 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/getUpdates "HTTP/1.1 200 OK"
+2025-02-21 23:52:55,931 - __main__ - INFO - Bot started
+2025-02-21 23:52:57,060 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/getMe "HTTP/1.1 200 OK"
+2025-02-21 23:52:57,209 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/deleteWebhook "HTTP/1.1 200 OK"
+2025-02-21 23:52:57,211 - telegram.ext.Application - INFO - Application started
+2025-02-21 23:52:58,344 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/getUpdates "HTTP/1.1 200 OK"
+2025-02-21 23:52:58,558 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/sendMessage "HTTP/1.1 200 OK"
+2025-02-21 23:52:58,816 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/sendMessage "HTTP/1.1 200 OK"
+2025-02-21 23:53:01,443 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/getUpdates "HTTP/1.1 200 OK"
+2025-02-21 23:53:01,626 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/answerCallbackQuery "HTTP/1.1 200 OK"
+2025-02-21 23:53:01,639 - __main__ - INFO - Main menu selection: search_by_title
+2025-02-21 23:53:01,848 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/editMessageText "HTTP/1.1 200 OK"
+2025-02-21 23:53:07,607 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/getUpdates "HTTP/1.1 200 OK"
+2025-02-21 23:53:17,847 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/getUpdates "HTTP/1.1 200 OK"
+2025-02-21 23:53:27,998 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/getUpdates "HTTP/1.1 200 OK"
+2025-02-21 23:53:28,153 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/getUpdates "HTTP/1.1 200 OK"
+2025-02-21 23:53:30,445 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/getUpdates "HTTP/1.1 200 OK"
+2025-02-21 23:53:35,126 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/getUpdates "HTTP/1.1 200 OK"
+2025-02-21 23:53:45,399 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/getUpdates "HTTP/1.1 200 OK"
+2025-02-22 12:04:07,828 - __main__ - INFO - Bot started
+2025-02-22 12:04:08,935 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/getMe "HTTP/1.1 200 OK"
+2025-02-22 12:04:09,083 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/deleteWebhook "HTTP/1.1 200 OK"
+2025-02-22 12:04:09,087 - telegram.ext.Application - INFO - Application started
+2025-02-22 12:04:14,277 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/getUpdates "HTTP/1.1 200 OK"
+2025-02-22 12:04:15,961 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/getUpdates "HTTP/1.1 200 OK"
+2025-02-22 12:04:16,103 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/getUpdates "HTTP/1.1 200 OK"
+2025-02-22 12:04:17,416 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/sendMessage "HTTP/1.1 200 OK"
+2025-02-22 12:04:19,386 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/getUpdates "HTTP/1.1 200 OK"
+2025-02-22 12:04:19,562 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/answerCallbackQuery "HTTP/1.1 200 OK"
+2025-02-22 12:04:19,565 - __main__ - INFO - Main menu selection: search_by_title
+2025-02-22 12:04:19,741 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/editMessageText "HTTP/1.1 200 OK"
+2025-02-22 12:04:27,848 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/getUpdates "HTTP/1.1 200 OK"
+2025-02-22 12:04:30,282 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/sendMessage "HTTP/1.1 200 OK"
+2025-02-22 12:04:33,283 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/getUpdates "HTTP/1.1 200 OK"
+2025-02-22 12:04:33,455 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/answerCallbackQuery "HTTP/1.1 200 OK"
+2025-02-22 12:04:33,637 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/answerCallbackQuery "HTTP/1.1 200 OK"
+2025-02-22 12:04:33,742 - telegram.ext.Updater - ERROR - Error while getting Updates: httpx.RemoteProtocolError: Server disconnected without sending a response.
+2025-02-22 12:04:33,742 - telegram.ext.Application - ERROR - No error handlers are registered, logging exception.
+Traceback (most recent call last):
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/httpx/_transports/default.py", line 66, in map_httpcore_exceptions
+    yield
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/httpx/_transports/default.py", line 366, in handle_async_request
+    resp = await self._pool.handle_async_request(req)
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/httpcore/_async/connection_pool.py", line 256, in handle_async_request
+    raise exc from None
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/httpcore/_async/connection_pool.py", line 236, in handle_async_request
+    response = await connection.handle_async_request(
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/httpcore/_async/connection.py", line 103, in handle_async_request
+    return await self._connection.handle_async_request(request)
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/httpcore/_async/http11.py", line 136, in handle_async_request
+    raise exc
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/httpcore/_async/http11.py", line 106, in handle_async_request
+    ) = await self._receive_response_headers(**kwargs)
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/httpcore/_async/http11.py", line 177, in _receive_response_headers
+    event = await self._receive_event(timeout=timeout)
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/httpcore/_async/http11.py", line 231, in _receive_event
+    raise RemoteProtocolError(msg)
+httpcore.RemoteProtocolError: Server disconnected without sending a response.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/telegram/request/_httpxrequest.py", line 268, in do_request
+    res = await self._client.request(
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/httpx/_client.py", line 1530, in request
+    return await self.send(request, auth=auth, follow_redirects=follow_redirects)
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/httpx/_client.py", line 1617, in send
+    response = await self._send_handling_auth(
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/httpx/_client.py", line 1645, in _send_handling_auth
+    response = await self._send_handling_redirects(
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/httpx/_client.py", line 1682, in _send_handling_redirects
+    response = await self._send_single_request(request)
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/httpx/_client.py", line 1719, in _send_single_request
+    response = await transport.handle_async_request(request)
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/httpx/_transports/default.py", line 366, in handle_async_request
+    resp = await self._pool.handle_async_request(req)
+  File "/Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/contextlib.py", line 135, in __exit__
+    self.gen.throw(type, value, traceback)
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/httpx/_transports/default.py", line 83, in map_httpcore_exceptions
+    raise mapped_exc(message) from exc
+httpx.RemoteProtocolError: Server disconnected without sending a response.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/telegram/ext/_updater.py", line 688, in _network_loop_retry
+    if not await action_cb():
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/telegram/ext/_updater.py", line 384, in polling_action_cb
+    raise exc
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/telegram/ext/_updater.py", line 373, in polling_action_cb
+    updates = await self.bot.get_updates(
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/telegram/ext/_extbot.py", line 558, in get_updates
+    updates = await super().get_updates(
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/telegram/_bot.py", line 525, in decorator
+    result = await func(self, *args, **kwargs)  # skipcq: PYL-E1102
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/telegram/_bot.py", line 3584, in get_updates
+    await self._post(
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/telegram/_bot.py", line 613, in _post
+    return await self._do_post(
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/telegram/ext/_extbot.py", line 340, in _do_post
+    return await super()._do_post(
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/telegram/_bot.py", line 641, in _do_post
+    return await request.post(
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/telegram/request/_baserequest.py", line 200, in post
+    result = await self._request_wrapper(
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/telegram/request/_baserequest.py", line 340, in _request_wrapper
+    raise exc
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/telegram/request/_baserequest.py", line 330, in _request_wrapper
+    code, payload = await self.do_request(
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/telegram/request/_httpxrequest.py", line 292, in do_request
+    raise NetworkError(f"httpx.{err.__class__.__name__}: {err}") from err
+telegram.error.NetworkError: httpx.RemoteProtocolError: Server disconnected without sending a response.
+2025-02-22 12:04:33,883 - telegram.ext.Application - ERROR - No error handlers are registered, logging exception.
+Traceback (most recent call last):
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/httpx/_transports/default.py", line 66, in map_httpcore_exceptions
+    yield
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/httpx/_transports/default.py", line 366, in handle_async_request
+    resp = await self._pool.handle_async_request(req)
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/httpcore/_async/connection_pool.py", line 256, in handle_async_request
+    raise exc from None
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/httpcore/_async/connection_pool.py", line 236, in handle_async_request
+    response = await connection.handle_async_request(
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/httpcore/_async/connection.py", line 103, in handle_async_request
+    return await self._connection.handle_async_request(request)
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/httpcore/_async/http11.py", line 136, in handle_async_request
+    raise exc
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/httpcore/_async/http11.py", line 106, in handle_async_request
+    ) = await self._receive_response_headers(**kwargs)
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/httpcore/_async/http11.py", line 177, in _receive_response_headers
+    event = await self._receive_event(timeout=timeout)
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/httpcore/_async/http11.py", line 231, in _receive_event
+    raise RemoteProtocolError(msg)
+httpcore.RemoteProtocolError: Server disconnected without sending a response.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/telegram/request/_httpxrequest.py", line 268, in do_request
+    res = await self._client.request(
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/httpx/_client.py", line 1530, in request
+    return await self.send(request, auth=auth, follow_redirects=follow_redirects)
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/httpx/_client.py", line 1617, in send
+    response = await self._send_handling_auth(
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/httpx/_client.py", line 1645, in _send_handling_auth
+    response = await self._send_handling_redirects(
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/httpx/_client.py", line 1682, in _send_handling_redirects
+    response = await self._send_single_request(request)
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/httpx/_client.py", line 1719, in _send_single_request
+    response = await transport.handle_async_request(request)
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/httpx/_transports/default.py", line 366, in handle_async_request
+    resp = await self._pool.handle_async_request(req)
+  File "/Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/contextlib.py", line 135, in __exit__
+    self.gen.throw(type, value, traceback)
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/httpx/_transports/default.py", line 83, in map_httpcore_exceptions
+    raise mapped_exc(message) from exc
+httpx.RemoteProtocolError: Server disconnected without sending a response.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/telegram/ext/_application.py", line 1234, in process_update
+    await coroutine
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/telegram/ext/_basehandler.py", line 157, in handle_update
+    return await self.callback(update, context)
+  File "/Users/romik/Desktop/movie-bot/movie-bot-mini-app/backend/bot/main.py", line 1013, in handle_pagination
+    await send_results_page(update, context, results, page, search_query)
+  File "/Users/romik/Desktop/movie-bot/movie-bot-mini-app/backend/bot/main.py", line 731, in send_results_page
+    await update.callback_query.edit_message_text(
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/telegram/_callbackquery.py", line 241, in edit_message_text
+    return await self.message.edit_text(
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/telegram/_message.py", line 2536, in edit_text
+    return await self.get_bot().edit_message_text(
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/telegram/ext/_extbot.py", line 1473, in edit_message_text
+    return await super().edit_message_text(
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/telegram/_bot.py", line 525, in decorator
+    result = await func(self, *args, **kwargs)  # skipcq: PYL-E1102
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/telegram/_bot.py", line 3288, in edit_message_text
+    return await self._send_message(
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/telegram/ext/_extbot.py", line 522, in _send_message
+    result = await super()._send_message(
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/telegram/_bot.py", line 703, in _send_message
+    result = await self._post(
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/telegram/_bot.py", line 613, in _post
+    return await self._do_post(
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/telegram/ext/_extbot.py", line 340, in _do_post
+    return await super()._do_post(
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/telegram/_bot.py", line 641, in _do_post
+    return await request.post(
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/telegram/request/_baserequest.py", line 200, in post
+    result = await self._request_wrapper(
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/telegram/request/_baserequest.py", line 340, in _request_wrapper
+    raise exc
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/telegram/request/_baserequest.py", line 330, in _request_wrapper
+    code, payload = await self.do_request(
+  File "/Users/romik/Library/Python/3.9/lib/python/site-packages/telegram/request/_httpxrequest.py", line 292, in do_request
+    raise NetworkError(f"httpx.{err.__class__.__name__}: {err}") from err
+telegram.error.NetworkError: httpx.RemoteProtocolError: Server disconnected without sending a response.
+2025-02-22 12:04:41,050 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/getUpdates "HTTP/1.1 200 OK"
+2025-02-22 12:04:42,154 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/answerCallbackQuery "HTTP/1.1 200 OK"
+2025-02-22 12:04:44,536 - __main__ - INFO - Attempting to translate: Christopher Nolan
+2025-02-22 12:04:44,536 - __main__ - INFO - Translation attempt 1
+2025-02-22 12:04:44,540 - __main__ - INFO - Generating translation
+2025-02-22 12:04:45,317 - __main__ - INFO - Decoding translation
+2025-02-22 12:04:45,317 - __main__ - INFO - Translation result: Кристофер Нолан
+2025-02-22 12:04:45,317 - __main__ - INFO - Validating translation: Christopher Nolan -> Кристофер Нолан
+2025-02-22 12:04:45,318 - __main__ - INFO - Translation passed validation
+2025-02-22 12:04:45,318 - __main__ - INFO - Successful translation: Christopher Nolan -> Кристофер Нолан. Adding to cache.
+2025-02-22 12:04:45,318 - __main__ - INFO - Validating translation: Christopher Nolan -> Кристофер Нолан
+2025-02-22 12:04:45,318 - __main__ - INFO - Translation passed validation
+2025-02-22 12:04:45,318 - __main__ - INFO - Attempting to translate: Leonardo DiCaprio
+2025-02-22 12:04:45,318 - __main__ - INFO - Translation attempt 1
+2025-02-22 12:04:45,319 - __main__ - INFO - Generating translation
+2025-02-22 12:04:45,508 - __main__ - INFO - Decoding translation
+2025-02-22 12:04:45,508 - __main__ - INFO - Translation result: Леонардо Ди Каприо
+2025-02-22 12:04:45,508 - __main__ - INFO - Validating translation: Leonardo DiCaprio -> Леонардо Ди Каприо
+2025-02-22 12:04:45,508 - __main__ - INFO - Translation passed validation
+2025-02-22 12:04:45,508 - __main__ - INFO - Successful translation: Leonardo DiCaprio -> Леонардо Ди Каприо. Adding to cache.
+2025-02-22 12:04:45,508 - __main__ - INFO - Attempting to translate: Joseph Gordon-Levitt
+2025-02-22 12:04:45,508 - __main__ - INFO - Translation attempt 1
+2025-02-22 12:04:45,509 - __main__ - INFO - Generating translation
+2025-02-22 12:04:45,740 - __main__ - INFO - Decoding translation
+2025-02-22 12:04:45,740 - __main__ - INFO - Translation result: Джозеф Гордон-Левитт
+2025-02-22 12:04:45,740 - __main__ - INFO - Validating translation: Joseph Gordon-Levitt -> Джозеф Гордон-Левитт
+2025-02-22 12:04:45,740 - __main__ - INFO - Translation passed validation
+2025-02-22 12:04:45,741 - __main__ - INFO - Successful translation: Joseph Gordon-Levitt -> Джозеф Гордон-Левитт. Adding to cache.
+2025-02-22 12:04:45,741 - __main__ - INFO - Attempting to translate: Ken Watanabe
+2025-02-22 12:04:45,741 - __main__ - INFO - Translation attempt 1
+2025-02-22 12:04:45,741 - __main__ - INFO - Generating translation
+2025-02-22 12:04:45,929 - __main__ - INFO - Decoding translation
+2025-02-22 12:04:45,930 - __main__ - INFO - Translation result: Кен Ватанабе
+2025-02-22 12:04:45,930 - __main__ - INFO - Validating translation: Ken Watanabe -> Кен Ватанабе
+2025-02-22 12:04:45,930 - __main__ - INFO - Translation passed validation
+2025-02-22 12:04:45,930 - __main__ - INFO - Successful translation: Ken Watanabe -> Кен Ватанабе. Adding to cache.
+2025-02-22 12:04:45,930 - __main__ - INFO - Attempting to translate: Tom Hardy
+2025-02-22 12:04:45,930 - __main__ - INFO - Translation attempt 1
+2025-02-22 12:04:45,930 - __main__ - INFO - Generating translation
+2025-02-22 12:04:46,084 - __main__ - INFO - Decoding translation
+2025-02-22 12:04:46,084 - __main__ - INFO - Translation result: Том Харди
+2025-02-22 12:04:46,084 - __main__ - INFO - Validating translation: Tom Hardy -> Том Харди
+2025-02-22 12:04:46,084 - __main__ - INFO - Translation passed validation
+2025-02-22 12:04:46,084 - __main__ - INFO - Successful translation: Tom Hardy -> Том Харди. Adding to cache.
+2025-02-22 12:04:46,084 - __main__ - INFO - Attempting to translate: Elliot Page
+2025-02-22 12:04:46,084 - __main__ - INFO - Translation attempt 1
+2025-02-22 12:04:46,085 - __main__ - INFO - Generating translation
+2025-02-22 12:04:46,265 - __main__ - INFO - Decoding translation
+2025-02-22 12:04:46,265 - __main__ - INFO - Translation result: Элиот Страница
+2025-02-22 12:04:46,265 - __main__ - INFO - Validating translation: Elliot Page -> Элиот Страница
+2025-02-22 12:04:46,265 - __main__ - INFO - Translation passed validation
+2025-02-22 12:04:46,265 - __main__ - INFO - Successful translation: Elliot Page -> Элиот Страница. Adding to cache.
+2025-02-22 12:04:46,422 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/editMessageText "HTTP/1.1 200 OK"
+2025-02-22 12:04:49,813 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/getUpdates "HTTP/1.1 200 OK"
+2025-02-22 12:04:49,976 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/answerCallbackQuery "HTTP/1.1 200 OK"
+2025-02-22 12:04:51,967 - __main__ - INFO - Attempting to translate: Christopher Nolan
+2025-02-22 12:04:51,967 - __main__ - INFO - Cache hit: Christopher Nolan -> Кристофер Нолан
+2025-02-22 12:04:51,967 - __main__ - INFO - Attempting to translate: Leonardo DiCaprio
+2025-02-22 12:04:51,967 - __main__ - INFO - Cache hit: Leonardo DiCaprio -> Леонардо Ди Каприо
+2025-02-22 12:04:51,968 - __main__ - INFO - Attempting to translate: Joseph Gordon-Levitt
+2025-02-22 12:04:51,968 - __main__ - INFO - Cache hit: Joseph Gordon-Levitt -> Джозеф Гордон-Левитт
+2025-02-22 12:04:51,968 - __main__ - INFO - Attempting to translate: Ken Watanabe
+2025-02-22 12:04:51,968 - __main__ - INFO - Cache hit: Ken Watanabe -> Кен Ватанабе
+2025-02-22 12:04:51,968 - __main__ - INFO - Attempting to translate: Tom Hardy
+2025-02-22 12:04:51,968 - __main__ - INFO - Cache hit: Tom Hardy -> Том Харди
+2025-02-22 12:04:51,968 - __main__ - INFO - Attempting to translate: Elliot Page
+2025-02-22 12:04:51,968 - __main__ - INFO - Cache hit: Elliot Page -> Элиот Страница
+2025-02-22 12:04:52,160 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/editMessageText "HTTP/1.1 200 OK"
+2025-02-22 12:04:53,891 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/getUpdates "HTTP/1.1 200 OK"
+2025-02-22 12:04:54,109 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/answerCallbackQuery "HTTP/1.1 200 OK"
+2025-02-22 12:04:54,290 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/answerCallbackQuery "HTTP/1.1 200 OK"
+2025-02-22 12:04:56,273 - __main__ - INFO - Attempting to translate: Christopher Nolan
+2025-02-22 12:04:56,274 - __main__ - INFO - Cache hit: Christopher Nolan -> Кристофер Нолан
+2025-02-22 12:04:56,274 - __main__ - INFO - Validating translation: Christopher Nolan -> Кристофер Нолан
+2025-02-22 12:04:56,274 - __main__ - INFO - Translation passed validation
+2025-02-22 12:04:56,274 - __main__ - INFO - Attempting to translate: Leonardo DiCaprio
+2025-02-22 12:04:56,274 - __main__ - INFO - Cache hit: Leonardo DiCaprio -> Леонардо Ди Каприо
+2025-02-22 12:04:56,274 - __main__ - INFO - Attempting to translate: Joseph Gordon-Levitt
+2025-02-22 12:04:56,274 - __main__ - INFO - Cache hit: Joseph Gordon-Levitt -> Джозеф Гордон-Левитт
+2025-02-22 12:04:56,274 - __main__ - INFO - Attempting to translate: Ken Watanabe
+2025-02-22 12:04:56,274 - __main__ - INFO - Cache hit: Ken Watanabe -> Кен Ватанабе
+2025-02-22 12:04:56,274 - __main__ - INFO - Attempting to translate: Tom Hardy
+2025-02-22 12:04:56,274 - __main__ - INFO - Cache hit: Tom Hardy -> Том Харди
+2025-02-22 12:04:56,274 - __main__ - INFO - Attempting to translate: Elliot Page
+2025-02-22 12:04:56,274 - __main__ - INFO - Cache hit: Elliot Page -> Элиот Страница
+2025-02-22 12:04:56,429 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/editMessageText "HTTP/1.1 200 OK"
+2025-02-22 12:04:59,110 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/getUpdates "HTTP/1.1 200 OK"
+2025-02-22 12:04:59,304 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/answerCallbackQuery "HTTP/1.1 200 OK"
+2025-02-22 12:04:59,534 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/answerCallbackQuery "HTTP/1.1 200 OK"
+2025-02-22 12:04:59,750 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/editMessageText "HTTP/1.1 200 OK"
+2025-02-22 12:05:01,979 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/getUpdates "HTTP/1.1 200 OK"
+2025-02-22 12:05:02,189 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/answerCallbackQuery "HTTP/1.1 200 OK"
+2025-02-22 12:05:02,359 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/answerCallbackQuery "HTTP/1.1 200 OK"
+2025-02-22 12:05:02,519 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/editMessageText "HTTP/1.1 200 OK"
+2025-02-22 12:05:09,797 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/getUpdates "HTTP/1.1 200 OK"
+2025-02-22 12:05:11,010 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/answerCallbackQuery "HTTP/1.1 200 OK"
+2025-02-22 12:05:11,176 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/editMessageText "HTTP/1.1 200 OK"
+2025-02-22 12:05:12,447 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/getUpdates "HTTP/1.1 200 OK"
+2025-02-22 12:05:12,619 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/answerCallbackQuery "HTTP/1.1 200 OK"
+2025-02-22 12:05:12,621 - __main__ - INFO - Main menu selection: search_by_filter
+2025-02-22 12:05:12,621 - __main__ - INFO - Attempting to start filter search
+2025-02-22 12:05:12,799 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/editMessageText "HTTP/1.1 200 OK"
+2025-02-22 12:05:15,784 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/getUpdates "HTTP/1.1 200 OK"
+2025-02-22 12:05:16,036 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/answerCallbackQuery "HTTP/1.1 200 OK"
+2025-02-22 12:05:16,037 - __main__ - INFO - Choose type called with data: type_movie
+2025-02-22 12:05:16,039 - __main__ - INFO - Selected type: movie
+2025-02-22 12:05:16,311 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/editMessageText "HTTP/1.1 200 OK"
+2025-02-22 12:05:18,311 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/getUpdates "HTTP/1.1 200 OK"
+2025-02-22 12:05:18,469 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/answerCallbackQuery "HTTP/1.1 200 OK"
+2025-02-22 12:05:18,484 - __main__ - INFO - Choose genre called with data: genre_28
+2025-02-22 12:05:18,485 - __main__ - INFO - Selected genre: 28
+2025-02-22 12:05:18,652 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/editMessageText "HTTP/1.1 200 OK"
+2025-02-22 12:05:21,046 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/getUpdates "HTTP/1.1 200 OK"
+2025-02-22 12:05:21,288 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/answerCallbackQuery "HTTP/1.1 200 OK"
+2025-02-22 12:05:21,293 - __main__ - INFO - Choose year called with data: skip_year
+2025-02-22 12:05:21,293 - __main__ - INFO - Year skipped
+2025-02-22 12:05:21,585 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/editMessageText "HTTP/1.1 200 OK"
+2025-02-22 12:05:22,657 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/getUpdates "HTTP/1.1 200 OK"
+2025-02-22 12:05:22,841 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/answerCallbackQuery "HTTP/1.1 200 OK"
+2025-02-22 12:05:22,853 - __main__ - INFO - Choose year called with data: back_to_year
+2025-02-22 12:05:23,019 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/editMessageText "HTTP/1.1 200 OK"
+2025-02-22 12:05:24,734 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/getUpdates "HTTP/1.1 200 OK"
+2025-02-22 12:05:24,900 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/answerCallbackQuery "HTTP/1.1 200 OK"
+2025-02-22 12:05:24,908 - __main__ - INFO - Choose year called with data: year_2000-2009
+2025-02-22 12:05:24,909 - __main__ - INFO - Selected year: 2000-2009
+2025-02-22 12:05:25,103 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/editMessageText "HTTP/1.1 200 OK"
+2025-02-22 12:05:28,147 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/getUpdates "HTTP/1.1 200 OK"
+2025-02-22 12:05:28,327 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/answerCallbackQuery "HTTP/1.1 200 OK"
+2025-02-22 12:05:28,330 - __main__ - INFO - Choose rating called with data: rating_high
+2025-02-22 12:05:28,331 - __main__ - INFO - Selected rating: high
+2025-02-22 12:05:28,598 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/editMessageText "HTTP/1.1 200 OK"
+2025-02-22 12:05:29,982 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/getUpdates "HTTP/1.1 200 OK"
+2025-02-22 12:05:30,160 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/answerCallbackQuery "HTTP/1.1 200 OK"
+2025-02-22 12:05:30,173 - __main__ - INFO - Choose country called with data: country_США
+2025-02-22 12:05:30,173 - __main__ - INFO - Selected country: США
+2025-02-22 12:05:30,334 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/editMessageText "HTTP/1.1 200 OK"
+2025-02-22 12:05:32,705 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/getUpdates "HTTP/1.1 200 OK"
+2025-02-22 12:05:32,924 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/answerCallbackQuery "HTTP/1.1 200 OK"
+2025-02-22 12:05:32,928 - __main__ - INFO - Choose sort called with data: sort_popularity
+2025-02-22 12:05:32,929 - __main__ - INFO - Selected sort type: popularity -> popularity.desc
+2025-02-22 12:05:32,929 - __main__ - INFO - Начало выполнения perform_filtered_search
+2025-02-22 12:05:33,106 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/answerCallbackQuery "HTTP/1.1 200 OK"
+2025-02-22 12:05:33,110 - __main__ - INFO - Текущие параметры фильтрации:
+2025-02-22 12:05:33,111 - __main__ - INFO - Тип: movie
+2025-02-22 12:05:33,111 - __main__ - INFO - Жанр: 28
+2025-02-22 12:05:33,111 - __main__ - INFO - Год: 2000-2009
+2025-02-22 12:05:33,111 - __main__ - INFO - Рейтинг: high
+2025-02-22 12:05:33,111 - __main__ - INFO - Страна: США
+2025-02-22 12:05:33,111 - __main__ - INFO - Сортировка: popularity.desc
+2025-02-22 12:05:33,111 - __main__ - INFO - Текущая дата: 2025-02-22
+2025-02-22 12:05:34,567 - __main__ - INFO - Всего элементов до фильтрации: 20
+2025-02-22 12:05:34,567 - __main__ - INFO - Обработка элемента: Тёмный рыцарь, дата выхода: 2008-07-16
+2025-02-22 12:05:34,567 - __main__ - ERROR - Ошибка обработки года для Тёмный рыцарь: '<' not supported between instances of 'int' and 'str'
+2025-02-22 12:05:34,567 - __main__ - INFO - Обработка элемента: Властелин колец: Возвращение короля, дата выхода: 2003-12-17
+2025-02-22 12:05:34,567 - __main__ - ERROR - Ошибка обработки года для Властелин колец: Возвращение короля: '<' not supported between instances of 'int' and 'str'
+2025-02-22 12:05:34,568 - __main__ - INFO - Обработка элемента: Властелин колец: Братство кольца, дата выхода: 2001-12-18
+2025-02-22 12:05:34,568 - __main__ - ERROR - Ошибка обработки года для Властелин колец: Братство кольца: '<' not supported between instances of 'int' and 'str'
+2025-02-22 12:05:34,568 - __main__ - INFO - Обработка элемента: Матрица, дата выхода: 1999-03-31
+2025-02-22 12:05:34,568 - __main__ - ERROR - Ошибка обработки года для Матрица: '<' not supported between instances of 'int' and 'str'
+2025-02-22 12:05:34,568 - __main__ - INFO - Обработка элемента: Гладиатор, дата выхода: 2000-05-04
+2025-02-22 12:05:34,568 - __main__ - ERROR - Ошибка обработки года для Гладиатор: '<' not supported between instances of 'int' and 'str'
+2025-02-22 12:05:34,568 - __main__ - INFO - Обработка элемента: Властелин колец: Две крепости, дата выхода: 2002-12-18
+2025-02-22 12:05:34,568 - __main__ - ERROR - Ошибка обработки года для Властелин колец: Две крепости: '<' not supported between instances of 'int' and 'str'
+2025-02-22 12:05:34,568 - __main__ - INFO - Обработка элемента: Звёздные войны: Эпизод 4 - Новая надежда, дата выхода: 1977-05-25
+2025-02-22 12:05:34,568 - __main__ - ERROR - Ошибка обработки года для Звёздные войны: Эпизод 4 - Новая надежда: '<' not supported between instances of 'int' and 'str'
+2025-02-22 12:05:34,569 - __main__ - INFO - Обработка элемента: Терминатор 2: Судный день, дата выхода: 1991-07-03
+2025-02-22 12:05:34,569 - __main__ - ERROR - Ошибка обработки года для Терминатор 2: Судный день: '<' not supported between instances of 'int' and 'str'
+2025-02-22 12:05:34,569 - __main__ - INFO - Обработка элемента: Лицо со шрамом, дата выхода: 1983-12-09
+2025-02-22 12:05:34,569 - __main__ - ERROR - Ошибка обработки года для Лицо со шрамом: '<' not supported between instances of 'int' and 'str'
+2025-02-22 12:05:34,569 - __main__ - INFO - Обработка элемента: Звёздные войны: Эпизод 5 - Империя наносит ответный удар, дата выхода: 1980-05-20
+2025-02-22 12:05:34,569 - __main__ - ERROR - Ошибка обработки года для Звёздные войны: Эпизод 5 - Империя наносит ответный удар: '<' not supported between instances of 'int' and 'str'
+2025-02-22 12:05:34,569 - __main__ - INFO - Обработка элемента: За кровь платят кровью, дата выхода: 1993-02-05
+2025-02-22 12:05:34,569 - __main__ - ERROR - Ошибка обработки года для За кровь платят кровью: '<' not supported between instances of 'int' and 'str'
+2025-02-22 12:05:34,569 - __main__ - INFO - Обработка элемента: Убить Билла: Кровавое дело целиком, дата выхода: 2011-03-27
+2025-02-22 12:05:34,569 - __main__ - ERROR - Ошибка обработки года для Убить Билла: Кровавое дело целиком: '<' not supported between instances of 'int' and 'str'
+2025-02-22 12:05:34,569 - __main__ - INFO - Обработка элемента: Hot Wheels: Жажда скорости - Зажигание, дата выхода: 2005-01-08
+2025-02-22 12:05:34,569 - __main__ - ERROR - Ошибка обработки года для Hot Wheels: Жажда скорости - Зажигание: '<' not supported between instances of 'int' and 'str'
+2025-02-22 12:05:34,570 - __main__ - INFO - Обработка элемента: The Powerpuff Girls Rule!!!, дата выхода: 2008-11-28
+2025-02-22 12:05:34,570 - __main__ - ERROR - Ошибка обработки года для The Powerpuff Girls Rule!!!: '<' not supported between instances of 'int' and 'str'
+2025-02-22 12:05:34,570 - __main__ - INFO - Обработка элемента: Astonishing X-Men: Gifted, дата выхода: 2009-10-27
+2025-02-22 12:05:34,570 - __main__ - ERROR - Ошибка обработки года для Astonishing X-Men: Gifted: '<' not supported between instances of 'int' and 'str'
+2025-02-22 12:05:34,570 - __main__ - INFO - Обработка элемента: Desperate Hours: An Amber Alert, дата выхода: 2008-12-19
+2025-02-22 12:05:34,570 - __main__ - ERROR - Ошибка обработки года для Desperate Hours: An Amber Alert: '<' not supported between instances of 'int' and 'str'
+2025-02-22 12:05:34,570 - __main__ - INFO - Обработка элемента: Самурай Джек: Премьерный фильм, дата выхода: 2017-10-16
+2025-02-22 12:05:34,570 - __main__ - ERROR - Ошибка обработки года для Самурай Джек: Премьерный фильм: '<' not supported between instances of 'int' and 'str'
+2025-02-22 12:05:34,571 - __main__ - INFO - Обработка элемента: Max Steel: Bio Crisis, дата выхода: 2008-10-01
+2025-02-22 12:05:34,571 - __main__ - ERROR - Ошибка обработки года для Max Steel: Bio Crisis: '<' not supported between instances of 'int' and 'str'
+2025-02-22 12:05:34,571 - __main__ - INFO - Обработка элемента: Max Steel: Dark Rival, дата выхода: 2007-10-01
+2025-02-22 12:05:34,571 - __main__ - ERROR - Ошибка обработки года для Max Steel: Dark Rival: '<' not supported between instances of 'int' and 'str'
+2025-02-22 12:05:34,571 - __main__ - INFO - Обработка элемента: Бешеный конь, дата выхода: 1996-07-07
+2025-02-22 12:05:34,571 - __main__ - ERROR - Ошибка обработки года для Бешеный конь: '<' not supported between instances of 'int' and 'str'
+2025-02-22 12:05:34,572 - __main__ - INFO - Найдено элементов после фильтрации: 0
+2025-02-22 12:05:34,771 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/editMessageText "HTTP/1.1 200 OK"

@@ -1,0 +1,545 @@
+import asyncio
+import logging
+import os
+from typing import List, Optional, Dict
+from dotenv import load_dotenv
+from fuzzywuzzy import fuzz #type: ignore
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.ext import (
+    Application, CommandHandler, MessageHandler, filters,
+    CallbackQueryHandler, ContextTypes, ConversationHandler
+)
+import tmdbsimple as tmdb
+from transformers import MarianMTModel, MarianTokenizer
+
+# Загрузка переменных окружения
+load_dotenv()
+
+# Константы
+BOT_TOKEN = os.getenv("BOT_TOKEN")
+TMDB_API_KEY = os.getenv("TMDB_API_KEY")
+ITEMS_PER_PAGE = 5
+CACHE_EXPIRATION = 3600  # 1 час в секундах
+MAX_DESCRIPTION_LENGTH = 200  # Определённая длина описания
+
+# Настройка логгирования
+logging.basicConfig(
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    level=logging.INFO
+)
+logger = logging.getLogger(__name__)
+
+if not BOT_TOKEN:
+    logger.error("BOT_TOKEN environment variable is not set.")
+    exit(1)
+
+if not TMDB_API_KEY:
+    logger.error("TMDB_API_KEY environment variable is not set.")
+    exit(1)
+
+tmdb.API_KEY = TMDB_API_KEY
+
+COUNTRIES = {
+    "United States of America": "США",
+    "United Kingdom": "Великобритания",
+    "Russia": "Россия",
+    "France": "Франция",
+    "Germany": "Германия",
+    "Japan": "Япония",
+    "Canada": "Канада",
+    "Italy": "Италия",
+    "Spain": "Испания",
+    "China": "Китай",
+    "South Korea": "Южная Корея",
+    "India": "Индия",
+    "Australia": "Австралия",
+    "Brazil": "Бразилия",
+    "Mexico": "Мексика"
+}
+
+GENRES = {
+    28: "Боевик",
+    12: "Приключения",
+    16: "Мультфильм",
+    35: "Комедия",
+    80: "Криминал",
+    99: "Документальный",
+    18: "Драма",
+    10751: "Семейный",
+    14: "Фэнтези",
+    36: "История",
+    27: "Ужасы",
+    10402: "Музыка",
+    9648: "Мистика",
+    10749: "Романтика",
+    878: "Фантастика",
+    10770: "Телевизионный фильм",
+    53: "Триллер",
+    10752: "Военный",
+    37: "Вестерн"
+}
+
+# Инициализация модели MarianMT для перевода
+def init_translation_model():
+    model_name = 'Helsinki-NLP/opus-mt-en-ru'
+    tokenizer = MarianTokenizer.from_pretrained(model_name)
+    model = MarianMTModel.from_pretrained(model_name)
+    return model, tokenizer
+
+model, tokenizer = init_translation_model()
+
+def translate_name(name: str) -> str:
+    """Переводит имя на русский язык с использованием MarianMT."""
+    try:
+        translated = translate([name], model, tokenizer)
+        return translated[0]
+    except Exception as e:
+        logger.error(f"Ошибка перевода имени {name}: {e}")
+        return name
+
+def translate(texts, model, tokenizer):
+    """Переводит список текстов, используя указанную модель и токенайзер."""
+    tokenized_texts = tokenizer(texts, return_tensors='pt', padding=True, truncation=True)
+    translated = model.generate(**tokenized_texts)
+    return [tokenizer.decode(t, skip_special_tokens=True) for t in translated]
+
+# Простой кэш для результатов поиска
+search_cache: Dict[str, Dict[str, any]] = {}
+
+# Состояния для ConversationHandler фильтрации
+CHOOSE_TYPE, CHOOSE_GENRE, CHOOSE_YEAR, CHOOSE_RATING, CHOOSE_COUNTRY, SHOW_RESULTS = range(6)
+
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Отправляет приветственное сообщение при команде /start."""
+    await update.message.reply_text(
+        "Добро пожаловать! Используйте команду /filter для поиска фильмов или /search для поиска по названию."
+    )
+
+async def filter_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    """Запускает процесс фильтрации для поиска фильмов или сериалов."""
+    keyboard = [
+        [InlineKeyboardButton("Фильм", callback_data='type_movie'),
+         InlineKeyboardButton("Сериал", callback_data='type_series')]
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+
+    await update.message.reply_text('Выберите тип:', reply_markup=reply_markup)
+    return CHOOSE_TYPE
+
+async def tmdb_search(query: str) -> Optional[List[dict]]:
+    """Выполняет поиск фильмов и сериалов в TMDb."""
+    if query in search_cache and search_cache[query]['timestamp'] > asyncio.get_event_loop().time() - CACHE_EXPIRATION:
+        return search_cache[query]['results']
+
+    try:
+        search = tmdb.Search()
+        response = await asyncio.to_thread(search.multi, query=query, language='ru')
+        results = response['results']
+
+        filtered_results = [item for item in results if item['media_type'] in ('movie', 'tv')]
+        sorted_results = sorted(
+            filtered_results,
+            key=lambda x: fuzz.ratio(query.lower(), x.get('title', x.get('name', '')).lower()),
+            reverse=True
+        )
+
+        search_cache[query] = {
+            'results': sorted_results,
+            'timestamp': asyncio.get_event_loop().time()
+        }
+
+        return sorted_results
+    except Exception as e:
+        logger.error(f"Error in TMDb search: {e}")
+        return None
+
+async def process_search(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Обрабатывает поисковый запрос пользователя."""
+    query = update.message.text
+    results = await tmdb_search(query)
+
+    if not results:
+        await update.message.reply_text("К сожалению, ничего не найдено. Попробуйте другой запрос.")
+        return
+
+    context.user_data['results'] = results
+    context.user_data['query'] = query
+    await send_results_page(update, context, results, 0, query)
+
+async def send_results_page(update: Update, context: ContextTypes.DEFAULT_TYPE, results: List[dict], page: int, query: str) -> None:
+    """Отправляет страницу с результатами поиска в виде кнопок."""
+    start = page * ITEMS_PER_PAGE
+    end = start + ITEMS_PER_PAGE
+    current_page_results = results[start:end]
+    total_pages = (len(results) + ITEMS_PER_PAGE - 1) // ITEMS_PER_PAGE  # общее количество страниц
+
+    if not current_page_results:
+        if update.callback_query:
+            await update.callback_query.message.reply_text("Нет доступных результатов для отображения.")
+        else:
+            await update.message.reply_text("Нет доступных результатов для отображения.")
+        return
+
+    page_number = page + 1
+    message_text = f"Результаты по запросу '{query}' (Страница {page_number} из {total_pages}):"
+
+    buttons = []
+    for item in current_page_results:
+        title = item.get('title', item.get('name', 'Без названия'))
+        year = item.get('release_date', item.get('first_air_date', '')).split('-')[0] or "N/A"
+        media_emoji = "🎬" if item['media_type'] == 'movie' else "📺"
+        button_text = f"{title} ({year}) {media_emoji}"
+        buttons.append([InlineKeyboardButton(button_text, callback_data=f"details_{item['id']}")])
+
+    # Добавление кнопок для пагинации
+    navigation_buttons = []
+    if page > 0:
+        navigation_buttons.append(InlineKeyboardButton("Предыдущая", callback_data=f"page_{page - 1}"))
+    if end < len(results):
+        navigation_buttons.append(InlineKeyboardButton("Следующая", callback_data=f"page_{page + 1}"))
+
+    if navigation_buttons:
+        buttons.append(navigation_buttons)
+
+    reply_markup = InlineKeyboardMarkup(buttons)
+    if update.callback_query:
+        await update.callback_query.message.edit_text(message_text, reply_markup=reply_markup)
+    else:
+        await update.message.reply_text(message_text, reply_markup=reply_markup)
+
+async def show_movie_details(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Отображает подробную информацию о выбранном фильме."""
+    query = update.callback_query
+    await query.answer()
+
+    movie_id = query.data.split('_')[1]
+    movie = tmdb.Movies(movie_id)
+
+    try:
+        response = await asyncio.to_thread(movie.info, language='ru')
+        title = response.get('title', response.get('name', 'Без названия'))
+        year = response.get('release_date', '').split('-')[0]
+        country_ids = response.get('production_countries', [])
+        countries = ", ".join([COUNTRIES.get(c['name'], c['name']) for c in country_ids])
+        genres = ", ".join([GENRES.get(genre['id'], genre['name']) for genre in response.get('genres', [])])
+        rating = f"{response.get('vote_average', 0.0):.1f}"
+        overview = response.get('overview', 'Нет описания')
+
+        credits_response = await asyncio.to_thread(movie.credits)
+        directors = [translate_name(crew_member['name']) for crew_member in credits_response.get('crew', []) if crew_member['job'].lower() in ['director', 'режиссер']]
+        director = ", ".join(directors) if directors else "Неизвестно"
+
+        cast_info = credits_response.get('cast', [])[:5]
+        cast = ", ".join([translate_name(actor['name']) for actor in cast_info])
+
+        message_text = (
+            f"*🎬 {title} ({year})*\n\n"
+            f"🌍 Страна: {countries}\n"
+            f"🎭 Жанр: {genres}\n"
+            f"⭐ Рейтинг: {rating}\n"
+            f"🎥 Режиссер: {director}\n"
+            f"👥 В ролях: {cast}\n\n"
+            f"📖{overview[:MAX_DESCRIPTION_LENGTH]}..."
+        )
+
+        keyboard = [
+            [InlineKeyboardButton("Читать далее", callback_data=f"expand_{movie_id}")],
+            [InlineKeyboardButton("Назад к списку", callback_data=f"back_to_list_{query.message.message_id}")]
+        ]
+
+        reply_markup = InlineKeyboardMarkup(keyboard)
+        await query.edit_message_text(message_text, reply_markup=reply_markup, parse_mode='Markdown')
+    except Exception as e:
+        logger.error(f"Error fetching movie details: {e}")
+        await query.edit_message_text("Ошибка получения данных о фильме.")
+
+async def expand_description(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Разворачивает полное описание фильма."""
+    query = update.callback_query
+    await query.answer()
+
+    movie_id = query.data.split('_')[1]
+    movie = tmdb.Movies(movie_id)
+
+    try:
+        response = await asyncio.to_thread(movie.info, language='ru')
+        title = response.get('title', response.get('name', 'Без названия'))
+        year = response.get('release_date', '').split('-')[0]
+        country_ids = response.get('production_countries', [])
+        countries = ", ".join([COUNTRIES.get(c['name'], c['name']) for c in country_ids])
+        genres = ", ".join([GENRES.get(genre['id'], genre['name']) for genre in response.get('genres', [])])
+        rating = f"{response.get('vote_average', 0.0):.1f}"
+        overview = response.get('overview', 'Нет описания')
+
+        credits_response = await asyncio.to_thread(movie.credits)
+        directors = [translate_name(crew_member['name']) for crew_member in credits_response.get('crew', []) if crew_member['job'].lower() in ['director', 'режиссер']]
+        director = ", ".join(directors) if directors else "Неизвестно"
+
+        cast_info = credits_response.get('cast', [])[:5]
+        cast = ", ".join([translate_name(actor['name']) for actor in cast_info])
+
+        message_text = (
+            f"*🎬 {title} ({year})*\n\n"
+            f"🌍 Страна: {countries}\n"
+            f"🎭 Жанр: {genres}\n"
+            f"⭐ Рейтинг: {rating}\n"
+            f"🎥 Режиссер: {director}\n"
+            f"👥 В ролях: {cast}\n\n"
+            f"{overview}"
+        )
+
+        keyboard = [
+            [InlineKeyboardButton("Свернуть описание", callback_data=f"collapse_{movie_id}")],
+            [InlineKeyboardButton("Назад к списку", callback_data="back_to_list")]
+        ]
+
+        reply_markup = InlineKeyboardMarkup(keyboard)
+        await query.edit_message_text(message_text, reply_markup=reply_markup, parse_mode='Markdown')
+    except Exception as e:
+        logger.error(f"Error expanding movie description: {e}")
+        await query.edit_message_text("Ошибка получения данных о фильме.")
+
+async def collapse_description(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Сворачивает описание фильма."""
+    query = update.callback_query
+    await query.answer()
+    await show_movie_details(update, context)
+
+async def handle_pagination(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Управляет пагинацией результатов поиска при помощи кнопок."""
+    query = update.callback_query
+    await query.answer()
+
+    if "back_to_list" in query.data:
+        # Handle returning to the list
+        await send_results_page(update, context, context.user_data['results'], 0, context.user_data['query'])
+        return
+
+    page = int(query.data.split('_')[1])
+    results = context.user_data['results']
+    search_query = context.user_data['query']
+
+    await send_results_page(update, context, results, page, search_query)
+
+async def choose_type(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    query = update.callback_query
+    await query.answer()
+
+    logger.info("Entering choose_type function")
+    logger.info(f"Received callback data: {query.data}")
+
+    try:
+        if query.data.startswith("type_"):
+            context.user_data['filter_type'] = query.data.split('_')[1]
+            logger.info(f"Selected type: {context.user_data['filter_type']}")
+        else:
+            logger.error(f"Unexpected callback data: {query.data}")
+            await query.edit_message_text("Произошла ошибка. Пожалуйста, начните поиск заново.")
+            return ConversationHandler.END
+
+        keyboard = [
+            [InlineKeyboardButton("Боевик", callback_data="genre_action"),
+             InlineKeyboardButton("Комедия", callback_data="genre_comedy")],
+            [InlineKeyboardButton("Драма", callback_data="genre_drama"),
+             InlineKeyboardButton("Фантастика", callback_data="genre_sci-fi")],
+            [InlineKeyboardButton("Любой", callback_data="skip_genre")]
+        ]
+        reply_markup = InlineKeyboardMarkup(keyboard)
+
+        logger.info("Sending genre selection message")
+        await query.edit_message_text("Выберите жанр:", reply_markup=reply_markup)
+        logger.info("Genre selection message sent successfully")
+        return CHOOSE_GENRE
+
+    except Exception as e:
+        logger.error(f"Error in choose_type: {e}")
+        await query.edit_message_text("Произошла ошибка. Пожалуйста, начните поиск заново.")
+        return ConversationHandler.END
+
+async def choose_genre(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    query = update.callback_query
+    await query.answer()
+
+    logger.info("Entering choose_genre function")
+    logger.info(f"Received callback data: {query.data}")
+
+    try:
+        if query.data.startswith("genre_"):
+            context.user_data['filter_genre'] = query.data.split('_')[1]
+            logger.info(f"Selected genre: {context.user_data['filter_genre']}")
+        elif query.data == "skip_genre":
+            context.user_data['filter_genre'] = None
+            logger.info("Genre selection skipped")
+        else:
+            logger.error(f"Unexpected callback data: {query.data}")
+            await query.edit_message_text("Произошла ошибка. Пожалуйста, начните поиск заново.")
+            return ConversationHandler.END
+
+        keyboard = [
+            [InlineKeyboardButton("2020-2023", callback_data="year_2020-2023"),
+             InlineKeyboardButton("2010-2019", callback_data="year_2010-2019")],
+            [InlineKeyboardButton("2000-2009", callback_data="year_2000-2009"),
+             InlineKeyboardButton("До 2000", callback_data="year_pre2000")],
+            [InlineKeyboardButton("Любой", callback_data="skip_year")]
+        ]
+        reply_markup = InlineKeyboardMarkup(keyboard)
+
+        logger.info("Sending year selection message")
+        await query.edit_message_text("Выберите год выпуска:", reply_markup=reply_markup)
+        logger.info("Year selection message sent successfully")
+        return CHOOSE_YEAR
+
+    except Exception as e:
+        logger.error(f"Error in choose_genre: {e}")
+        await query.edit_message_text("Произошла ошибка. Пожалуйста, начните поиск заново.")
+        return ConversationHandler.END
+
+async def choose_year(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    query = update.callback_query
+    await query.answer()
+
+    logger.info("Entering choose_year function")
+    logger.info(f"Received callback data: {query.data}")
+
+    try:
+        if query.data.startswith("year_"):
+            context.user_data['filter_year'] = query.data.split('_')[1]
+            logger.info(f"Selected year range: {context.user_data['filter_year']}")
+        elif query.data == "skip_year":
+            context.user_data['filter_year'] = None
+            logger.info("Year selection skipped")
+        else:
+            logger.error(f"Unexpected callback data: {query.data}")
+            await query.edit_message_text("Произошла ошибка. Пожалуйста, начните поиск заново.")
+            return ConversationHandler.END
+
+        keyboard = [
+            [InlineKeyboardButton("Более 8", callback_data="rating_high"),
+             InlineKeyboardButton("От 5 до 8", callback_data="rating_medium"),
+             InlineKeyboardButton("Меньше 5", callback_data="rating_low")],
+            [InlineKeyboardButton("Любой", callback_data="skip_rating")]
+        ]
+        reply_markup = InlineKeyboardMarkup(keyboard)
+
+        logger.info("Sending rating selection message")
+        await query.edit_message_text("Выберите рейтинг:", reply_markup=reply_markup)
+        logger.info("Rating selection message sent successfully")
+        return CHOOSE_RATING
+
+    except Exception as e:
+        logger.error(f"Error in choose_year: {e}")
+        await query.edit_message_text("Произошла ошибка. Пожалуйста, начните поиск заново.")
+        return ConversationHandler.END
+
+async def choose_rating(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    query = update.callback_query
+    await query.answer()
+
+    logger.info("Entering choose_rating function")
+    logger.info(f"Received callback data: {query.data}")
+
+    try:
+        if query.data.startswith("rating_"):
+            context.user_data['filter_rating'] = query.data.split('_')[1]
+            logger.info(f"Selected rating: {context.user_data['filter_rating']}")
+        elif query.data == "skip_rating":
+            context.user_data['filter_rating'] = None
+            logger.info("Rating selection skipped")
+        else:
+            logger.error(f"Unexpected callback data: {query.data}")
+            await query.edit_message_text("Произошла ошибка. Пожалуйста, начните поиск заново.")
+            return ConversationHandler.END
+
+        keyboard = [
+            [InlineKeyboardButton(COUNTRIES[country], callback_data=f"country_{country}")]
+            for country in list(COUNTRIES.keys())[:4]
+        ] + [[InlineKeyboardButton("Любая", callback_data="skip_country")]]
+        reply_markup = InlineKeyboardMarkup(keyboard)
+
+        logger.info("Sending country selection message")
+        await query.edit_message_text("Выберите страну:", reply_markup=reply_markup)
+        logger.info("Country selection message sent successfully")
+        return CHOOSE_COUNTRY
+
+    except Exception as e:
+        logger.error(f"Error in choose_rating: {e}")
+        await query.edit_message_text("Произошла ошибка. Пожалуйста, начните поиск заново.")
+        return ConversationHandler.END
+
+async def choose_country(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    query = update.callback_query
+    await query.answer()
+
+    logger.info("Entering choose_country function")
+    logger.info(f"Received callback data: {query.data}")
+
+    try:
+        if query.data.startswith("country_"):
+            context.user_data['filter_country'] = query.data.split('_')[1]
+            logger.info(f"Selected country: {context.user_data['filter_country']}")
+        elif query.data == "skip_country":
+            context.user_data['filter_country'] = None
+            logger.info("Country selection skipped")
+        else:
+            logger.error(f"Unexpected callback data: {query.data}")
+            await query.edit_message_text("Произошла ошибка. Пожалуйста, начните поиск заново.")
+            return ConversationHandler.END
+
+        # Реализовать фильтрованный поиск
+        await perform_filtered_search(update, context)
+
+    except Exception as e:
+        logger.error(f"Error in choose_country: {e}")
+        await query.edit_message_text("Произошла ошибка. Пожалуйста, начните поиск заново.")
+        return ConversationHandler.END
+
+async def perform_filtered_search(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Выполняет поиск с учетом всех выбранных фильтров."""
+    # Здесь реализуйте логику для поиска фильма по заданным фильтрам (тип, жанр, год, рейтинг, страна).
+    # Не забудьте обновить ИД поиска или контекста фильтров, чтобы использовать TMDB API.
+
+    # Это заглушка, замените реализацией на сегодняшний день:
+    if update.callback_query:
+        await update.callback_query.message.reply_text("Поиск завершён. Пожалуйста, просмотрите результаты.")
+    else:
+        await update.message.reply_text("Поиск завершён. Пожалуйста, просмотрите результаты.")
+
+async def cancel_filter(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    """Отменяет текущую операцию фильтрации."""
+    logger.info("Operation canceled by user.")
+    await update.message.reply_text('Поиск отменён.')
+    return ConversationHandler.END
+
+def main() -> None:
+    # Создадим объект Application
+    application = Application.builder().token(BOT_TOKEN).build()
+
+    # Определение обработчиков диалогов фильтрации
+    filter_conv_handler = ConversationHandler(
+        entry_points=[CommandHandler("filter", filter_command)],
+        states={
+            CHOOSE_TYPE: [CallbackQueryHandler(choose_type, pattern='^type_')],
+            CHOOSE_GENRE: [CallbackQueryHandler(choose_genre, pattern='^genre_|^skip_genre')],
+            CHOOSE_YEAR: [CallbackQueryHandler(choose_year, pattern='^year_|^skip_year')],
+            CHOOSE_RATING: [CallbackQueryHandler(choose_rating, pattern='^rating_|^skip_rating')],
+            CHOOSE_COUNTRY: [CallbackQueryHandler(choose_country, pattern='^country_|^skip_country')],
+        },
+        fallbacks=[CommandHandler("cancel", cancel_filter)],
+    )
+
+    # Добавление обработчиков
+    application.add_handler(filter_conv_handler)
+    application.add_handler(CommandHandler("start", start))
+    application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, process_search))
+    application.add_handler(CallbackQueryHandler(show_movie_details, pattern=r"^details_"))
+    application.add_handler(CallbackQueryHandler(expand_description, pattern=r"^expand_"))
+    application.add_handler(CallbackQueryHandler(collapse_description, pattern=r"^collapse_"))
+    application.add_handler(CallbackQueryHandler(handle_pagination, pattern=r"^page_|^back_to_list"))
+
+    logger.info("Bot started")
+    # Запуск бота в режиме polling
+    application.run_polling()
+
+if __name__ == '__main__':
+    main()
+
