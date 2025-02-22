@@ -18,6 +18,6 @@ export default defineConfig({
     port: 3000,
     strictPort: true,
     host: true,
-    allowedHosts: ['4e09-169-150-215-52.ngrok-free.app'], // Добавляем разрешенный хост
+    allowedHosts: ['https://cinematch-7mj1c4710-romiks-projects-f2369c35.vercel.app'], // Добавляем разрешенный хост
   }
 })
