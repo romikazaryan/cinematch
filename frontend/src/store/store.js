@@ -1,4 +1,4 @@
-// src/store/store.js
+// src/store/store.jsi
 import { configureStore } from '@reduxjs/toolkit';
 import moviesReducer from './moviesSlice';
 import filtersReducer from './filtersSlice';

@@ -1,39 +1,24 @@
-// src/hooks/useTelegram.js
-import { useEffect, useCallback } from 'react';
-import { telegram } from '../services/telegram/telegramWebApp';
-
 export function useTelegram() {
-  useEffect(() => {
-    // Подписываемся на события темы
-    const handleThemeChange = () => {
-      telegram.setupTheme();
-    };
-    
-    telegram.webapp.onEvent('themeChanged', handleThemeChange);
-    
-    return () => {
-      telegram.webapp.offEvent('themeChanged', handleThemeChange);
-    };
-  }, []);
+  const tg = window.Telegram.WebApp;
 
-  const showMainButton = useCallback((text, onClick) => {
-    telegram.showMainButton(text, onClick);
-  }, []);
+  const onClose = () => {
+    tg.close();
+  };
 
-  const hideMainButton = useCallback(() => {
-    telegram.hideMainButton();
-  }, []);
-
-  const sendToBot = useCallback((data) => {
-    telegram.sendDataToBot(data);
-  }, []);
+  const onToggleButton = () => {
+    if (tg.MainButton.isVisible) {
+      tg.MainButton.hide();
+    } else {
+      tg.MainButton.show();
+    }
+  };
 
   return {
-    showMainButton,
-    hideMainButton,
-    sendToBot,
-    user: telegram.webapp.initDataUnsafe?.user,
-    colorScheme: telegram.webapp.colorScheme,
-    themeParams: telegram.webapp.themeParams,
+    onClose,
+    onToggleButton,
+    tg,
+    user: tg.initDataUnsafe?.user,
+    colorScheme: tg.colorScheme,
+    sendToBot: (data) => tg.sendData(JSON.stringify(data))
   };
 }

@@ -1,13 +1,11 @@
-// src/app/App.jsx
+// src/App.jsx
 import React, { useState } from 'react';
 import { Provider } from 'react-redux';
-import SearchBar from "@/components/search/SearchBar";
-import MovieList from "@/components/movies/MovieList"; // Исправлен путь
-import { useMovieSearch } from "@/hooks/useMovieSearch";
-import { useTelegram } from "@/hooks/useTelegram";
-import { store } from "@/store/store";
-
-// Остальной код без изменений
+import { store } from './app/store';
+import { useTelegram } from './hooks/useTelegram';
+import SearchBar from './components/search/SearchBar';
+import MovieList from './components/movies/MovieList/MovieList';
+import { useMovieSearch } from './hooks/useMovieSearch';
 
 function AppContent() {
   const { colorScheme, sendToBot } = useTelegram();

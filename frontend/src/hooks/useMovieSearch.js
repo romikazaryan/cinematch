@@ -1,7 +1,9 @@
 // src/hooks/useMovieSearch.js
 import { useState, useEffect } from 'react';
-import { useDebounce } from './useDebounce';
-import { tmdbService } from '../services/api/tmdbService';
+import { useDebounce } from '@/hooks/useDebounce';
+import { tmdbService } from '@/services/api/tmdbService'; // Исправлен путь
+
+// Остальной код без изменений
 
 export const useMovieSearch = (query) => {
   const [movies, setMovies] = useState([]);
