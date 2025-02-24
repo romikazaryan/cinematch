@@ -1,4 +1,5 @@
-const WEB_APP_URL = 'https://cinematch-kappa.vercel.app'
+// src/services/telegram/telegramWebApp.js
+const WEB_APP_URL = import.meta.env.VITE_WEB_APP_URL || 'https://cinematch-kappa.vercel.app';
 
 class TelegramWebApp {
   constructor() {
