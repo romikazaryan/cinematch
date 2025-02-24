@@ -1,0 +1,978 @@
+k_data="genre_35")
+            ],
+            [
+                InlineKeyboardButton("Драма", callback_data="genre_18"),
+                InlineKeyboardButton("Фантастика", callback_data="genre_878")
+            ],
+            [InlineKeyboardButton("Любой", callback_data="skip_genre")],
+            [InlineKeyboardButton("« Назад", callback_data="back_to_type")],
+            [InlineKeyboardButton("🏠 В главное меню", callback_data="back_to_main_menu")]
+        ]
+        reply_markup = InlineKeyboardMarkup(genre_keyboard)
+        await query.edit_message_text("Выберите жанр:", reply_markup=reply_markup)
+        return CHOOSE_GENRE
+    
+    return CHOOSE_TYPE
+
+async def choose_genre(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    """Выбор жанра."""
+    query = update.callback_query
+    await query.answer()
+    
+    if query.data == "back_to_type":
+        keyboard = [
+            [
+                InlineKeyboardButton("Фильм", callback_data='type_movie'),
+                InlineKeyboardButton("Сериал", callback_data='type_series')
+            ],
+            [InlineKeyboardButton("🏠 В главное меню", callback_data="back_to_main_menu")]
+        ]
+        reply_markup = InlineKeyboardMarkup(keyboard)
+        await query.edit_message_text('Выберите тип:', reply_markup=reply_markup)
+        return CHOOSE_TYPE
+    
+    if query.data.startswith("genre_") or query.data == "skip_genre":
+        if query.data.startswith("genre_"):
+            context.user_data['filter_genre'] = query.data.split('_')[1]
+        else:
+            context.user_data['filter_genre'] = None
+        
+        keyboard = [
+            [
+                InlineKeyboardButton("2020-2023", callback_data="year_2020-2023"),
+                InlineKeyboardButton("2010-2019", callback_data="year_2010-2019")
+            ],
+            [
+                InlineKeyboardButton("2000-2009", callback_data="year_2000-2009"),
+                InlineKeyboardButton("До 2000", callback_data="year_pre2000")
+            ],
+            [InlineKeyboardButton("Любой", callback_data="skip_year")],
+            [InlineKeyboardButton("« Назад", callback_data="back_to_genre")],
+            [InlineKeyboardButton("🏠 В главное меню", callback_data="back_to_main_menu")]
+        ]
+        reply_markup = InlineKeyboardMarkup(keyboard)
+        await query.edit_message_text("Выберите год выпуска:", reply_markup=reply_markup)
+        return CHOOSE_YEAR
+    
+    return CHOOSE_GENRE
+
+async def choose_year(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    """Выбор года."""
+    query = update.callback_query
+    await query.answer()
+    
+    if query.data == "back_to_genre":
+        genre_keyboard = [
+            [
+                InlineKeyboardButton("Боевик", callback_data="genre_28"),
+                InlineKeyboardButton("Комедия", callback_data="genre_35")
+            ],
+            [
+                InlineKeyboardButton("Драма", callback_data="genre_18"),
+                InlineKeyboardButton("Фантастика", callback_data="genre_878")
+            ],
+            [InlineKeyboardButton("Любой", callback_data="skip_genre")],
+            [InlineKeyboardButton("« Назад", callback_data="back_to_type")],
+            [InlineKeyboardButton("🏠 В главное меню", callback_data="back_to_main_menu")]
+        ]
+        reply_markup = InlineKeyboardMarkup(genre_keyboard)
+        await query.edit_message_text("Выберите жанр:", reply_markup=reply_markup)
+        return CHOOSE_GENRE
+    
+    if query.data.startswith("year_") or query.data == "skip_year":
+        if query.data.startswith("year_"):
+            context.user_data['filter_year'] = query.data.split('_')[1]
+        else:
+            context.user_data['filter_year'] = None
+        
+        keyboard = [
+            [
+                InlineKeyboardButton("Более 8", callback_data="rating_high"),
+                InlineKeyboardButton("От 5 до 8", callback_data="rating_medium"),
+                InlineKeyboardButton("Меньше 5", callback_data="rating_low")
+            ],
+            [InlineKeyboardButton("Любой", callback_data="skip_rating")],
+            [InlineKeyboardButton("« Назад", callback_data="back_to_year")],
+            [InlineKeyboardButton("🏠 В главное меню", callback_data="back_to_main_menu")]
+        ]
+        reply_markup = InlineKeyboardMarkup(keyboard)
+        await query.edit_message_text("Выберите рейтинг:", reply_markup=reply_markup)
+        return CHOOSE_RATING
+    
+    return CHOOSE_YEAR
+
+async def choose_rating(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    """Выбор рейтинга."""
+    query = update.callback_query
+    await query.answer()
+    
+    if query.data == "back_to_year":
+        keyboard = [
+            [
+                InlineKeyboardButton("2020-2023", callback_data="year_2020-2023"),
+                InlineKeyboardButton("2010-2019", callback_data="year_2010-2019")
+            ],
+            [
+                InlineKeyboardButton("2000-2009", callback_data="year_2000-2009"),
+                InlineKeyboardButton("До 2000", callback_data="year_pre2000")
+            ],
+            [InlineKeyboardButton("Любой", callback_data="skip_year")],
+            [InlineKeyboardButton("« Назад", callback_data="back_to_genre")],
+            [InlineKeyboardButton("🏠 В главное меню", callback_data="back_to_main_menu")]
+        ]
+        reply_markup = InlineKeyboardMarkup(keyboard)
+        await query.edit_message_text("Выберите год выпуска:", reply_markup=reply_markup)
+        return CHOOSE_YEAR
+    
+    if query.data.startswith("rating_") or query.data == "skip_rating":
+        if query.data.startswith("rating_"):
+            context.user_data['filter_rating'] = query.data.split('_')[1]
+        else:
+            context.user_data['filter_rating'] = None
+        
+        main_countries = [
+            'США', 'Россия', 
+            'Великобритания', 'Франция',
+            'Германия', 'Япония',
+            'Южная Корея', 'Китай',
+            'Италия', 'Испания',
+            'Канада', 'Австралия',
+            'Индия', 'Бразилия',
+            'Мексика'
+        ]
+        
+        country_buttons = []
+        for i in range(0, len(main_countries), 2):
+            row = []
+            row.append(InlineKeyboardButton(main_countries[i], callback_data=f"country_{main_countries[i]}"))
+            
+            if i + 1 < len(main_countries):
+                row.append(InlineKeyboardButton(main_countries[i+1], callback_data=f"country_{main_countries[i+1]}"))
+            
+            country_buttons.append(row)
+        
+        keyboard = country_buttons + [
+            [InlineKeyboardButton("Любая", callback_data="skip_country")],
+            [InlineKeyboardButton("« Назад", callback_data="back_to_rating")],
+            [InlineKeyboardButton("🏠 В главное меню", callback_data="back_to_main_menu")]
+        ]
+        reply_markup = InlineKeyboardMarkup(keyboard)
+        await query.edit_message_text("Выберите страну:", reply_markup=reply_markup)
+        return CHOOSE_COUNTRY
+    
+    return CHOOSE_RATING
+
+async def choose_country(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    """Выбор страны."""
+    query = update.callback_query
+    await query.answer()
+    
+    if query.data == "back_to_rating":
+        keyboard = [
+            [
+                InlineKeyboardButton("Более 8", callback_data="rating_high"),
+                InlineKeyboardButton("От 5 до 8", callback_data="rating_medium"),
+                InlineKeyboardButton("Меньше 5", callback_data="rating_low")
+            ],
+            [InlineKeyboardButton("Любой", callback_data="skip_rating")],
+            [InlineKeyboardButton("« Назад", callback_data="back_to_year")],
+            [InlineKeyboardButton("🏠 В главное меню", callback_data="back_to_main_menu")]
+        ]
+        reply_markup = InlineKeyboardMarkup(keyboard)
+        await query.edit_message_text("Выберите рейтинг:", reply_markup=reply_markup)
+        return CHOOSE_RATING
+    
+    if query.data.startswith("country_") or query.data == "skip_country":
+        if query.data.startswith("country_"):
+            context.user_data['filter_country'] = query.data.split('_')[1]
+        else:
+            context.user_data['filter_country'] = None
+        
+        await perform_filtered_search(update, context)
+        return ConversationHandler.END
+    
+    return CHOOSE_COUNTRY
+
+async def perform_filtered_search(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    logger.info("Начало выполнения perform_filtered_search")
+    query = update.callback_query
+    await query.answer()
+
+    # Извлечение параметров фильтрации
+    filter_type = context.user_data.get('filter_type', 'movie')
+    filter_genre = context.user_data.get('filter_genre')
+    filter_year = context.user_data.get('filter_year')
+    filter_rating = context.user_data.get('filter_rating')
+    filter_country = context.user_data.get('filter_country')
+    sort_by = context.user_data.get('sort_by', 'popularity.desc')
+
+    current_date = datetime.now().strftime('%Y-%m-%d')
+    current_year = datetime.now().year
+
+    logger.info(f"Текущие параметры фильтрации:")
+    logger.info(f"Тип: {filter_type}")
+    logger.info(f"Жанр: {filter_genre}")
+    logger.info(f"Год: {filter_year}")
+    logger.info(f"Рейтинг: {filter_rating}")
+    logger.info(f"Страна: {filter_country}")
+    logger.info(f"Сортировка: {sort_by}")
+    logger.info(f"Текущая дата: {current_date}")
+
+    # Параметры для поиска
+    params = {
+        'language': 'ru',
+        'sort_by': sort_by,
+        'include_adult': False,
+        'with_origin_country': RU_COUNTRIES.get(filter_country, filter_country)
+    }
+
+    # Обработка жанров
+    if filter_genre:
+        genre_id = filter_genre
+        if filter_type == 'series':
+            genre_id = '10759' if genre_id == '28' else genre_id
+        params['with_genres'] = genre_id
+
+    # Обработка года
+    year_ranges = {
+        '2020-2023': {'start': 2020, 'end': current_year},
+        '2010-2019': {'start': 2010, 'end': 2019},
+        '2000-2009': {'start': 2000, 'end': 2009},
+        'pre2000': {'start': 1900, 'end': 1999}
+    }
+
+    if filter_year and filter_year != 'skip_year':
+        year_range = year_ranges.get(filter_year, {})
+        
+        # Для фильмов
+        if filter_type in ['movie', 'all']:
+            params['release_date.gte'] = f'{year_range["start"]}-01-01'
+            params['release_date.lte'] = f'{year_range["end"]}-12-31'
+        
+        # Для сериалов
+        if filter_type in ['series', 'all']:
+            params['first_air_date.gte'] = f'{year_range["start"]}-01-01'
+            params['first_air_date.lte'] = f'{year_range["end"]}-12-31'
+
+    # Обработка рейтинга 
+    if filter_rating and filter_rating != 'skip_rating':
+        rating_ranges = {
+            'high': {'gte': 8.0},
+            'medium': {'gte': 5.0, 'lte': 8.0},
+            'low': {'lte': 5.0}
+        }
+        rating_range = rating_ranges.get(filter_rating, {})
+        
+        params['vote_average.gte'] = rating_range.get('gte', 0)
+        if 'lte' in rating_range:
+            params['vote_average.lte'] = rating_range['lte']
+
+    try:
+        results = []
+        
+        # Универсальный поиск для всех типов
+        if filter_type == 'all':
+            movie_params = params.copy()
+            tv_params = params.copy()
+            
+            movie_response = await asyncio.to_thread(tmdb.Discover().movie, **movie_params)
+            tv_response = await asyncio.to_thread(tmdb.Discover().tv, **tv_params)
+            
+            # Объединяем результаты с типом медиа
+            movie_results = movie_response.get('results', [])
+            tv_results = tv_response.get('results', [])
+            
+            for movie in movie_results:
+                movie['media_type'] = 'movie'
+            for tv in tv_results:
+                tv['media_type'] = 'tv'
+            
+            results = movie_results + tv_results
+        else:
+            # Поиск для конкретного типа
+            search_function = tmdb.Discover().tv if filter_type == 'series' else tmdb.Discover().movie
+            media_type = 'tv' if filter_type == 'series' else 'movie'
+            
+            response = await asyncio.to_thread(search_function, **params)
+            results = response.get('results', [])
+            for item in results:
+                item['media_type'] = media_type
+
+        logger.info(f"Всего элементов до фильтрации: {len(results)}")
+
+        # Фильтрация результатов
+        filtered_results = []
+        for item in results:
+            release_date = item.get('release_date', item.get('first_air_date', ''))
+            title = item.get('title', item.get('name', 'Неизвестно'))
+            
+            logger.info(f"Обработка элемента: {title}, дата выхода: {release_date}")
+
+            # Пропускаем элементы с пустой датой
+            if not release_date:
+                logger.info(f"Пропуск {title}: пустая дата выхода")
+                continue
+
+            # Пропускаем элементы с будущей датой
+            try:
+                # Преобразуем дату в строку и берем первые 10 символов
+                release_date_str = str(release_date)[:10]
+                
+                if release_date_str > current_date:
+                    logger.info(f"Пропуск {title}: дата выхода в будущем {release_date_str}")
+                    continue
+            except Exception as e:
+                logger.error(f"Ошибка обработки даты для {title}: {e}")
+                continue
+
+            # Проверка года, если фильтр года установлен
+            if filter_year != 'skip_year':
+                try:
+                    # Безопасное извлечение года
+                    year_str = str(release_date)[:4]
+                    year = int(year_str) if year_str.isdigit() else 0
+                    
+                    range_start, range_end = year_ranges.get(filter_year, (1900, current_year))
+                    
+                    if year < range_start or year > range_end:
+                        logger.info(f"Пропуск {title}: год {year} вне диапазона {range_start}-{range_end}")
+                        continue
+                except (ValueError, TypeError) as e:
+                    logger.error(f"Ошибка обработки года для {title}: {e}")
+                    continue
+            
+            filtered_results.append(item)
+
+        logger.info(f"Найдено элементов после фильтрации: {len(filtered_results)}")
+
+        # Сортировка результатов
+        if sort_by == 'popularity.desc':
+            filtered_results.sort(key=lambda x: float(x.get('popularity', 0)), reverse=True)
+        elif sort_by == 'vote_average.desc':
+            filtered_results.sort(key=lambda x: float(x.get('vote_average', 0)), reverse=True)
+        elif sort_by == 'primary_release_date.desc':
+            filtered_results.sort(
+                key=lambda x: x.get('release_date', x.get('first_air_date', '1900-01-01')), 
+                reverse=True
+            )
+
+        if not filtered_results:
+            message = (
+                "❌ По вашему запросу ничего не найдено.\n\n"
+                "Возможные причины:\n"
+                "• Слишком узкие критерии поиска\n"
+                "• Нет контента с этими параметрами\n"
+                "• Технические ограничения API\n\n"
+                "Попробуйте изменить параметры поиска."
+            )
+            keyboard = [
+                [InlineKeyboardButton("🔄 Новый поиск", callback_data="search_by_filter")],
+                [InlineKeyboardButton("🏠 В главное меню", callback_data="back_to_main_menu")]
+            ]
+            reply_markup = InlineKeyboardMarkup(keyboard)
+            await query.edit_message_text(message, reply_markup=reply_markup)
+            return
+
+        # Создание информации о фильтрах
+        filter_info = []
+        if filter_type != 'all':
+            filter_info.append(f"Тип: {'Сериал' if filter_type == 'series' else 'Фильм'}")
+        if filter_genre:
+            genre_name = get_genre_name(filter_genre, media_type=filter_type)
+            filter_info.append(f"Жанр: {genre_name}")
+        if filter_year:
+            year_text = {
+                '2020-2023': '2020-2023',
+                '2010-2019': '2010-2019',
+                '2000-2009': '2000-2009',
+                'pre2000': 'До 2000'
+            }.get(filter_year)
+            if year_text:
+                filter_info.append(f"Год: {year_text}")
+        if filter_rating:
+            rating_text = {
+                'high': 'Более 8',
+                'medium': 'От 5 до 8',
+                'low': 'Меньше 5'
+            }.get(filter_rating)
+            if rating_text:
+                filter_info.append(f"Рейтинг: {rating_text}")
+        if filter_country:
+            filter_info.append(f"Страна: {filter_country}")
+        
+        sort_text = {
+            'popularity.desc': 'по популярности',
+            'vote_average.desc': 'по рейтингу',
+            'primary_release_date.desc': 'по дате выхода'
+        }.get(sort_by, 'по популярности')
+        filter_info.append(f"Сортировка: {sort_text}")
+
+        filter_summary = " | ".join(filter_info)
+        search_query = f"Результаты поиска\n📋 Фильтры: {filter_summary}"
+
+        context.user_data['results'] = filtered_results
+        context.user_data['query'] = search_query
+
+        await send_results_page(update, context, filtered_results, 0, search_query)
+
+    except Exception as e:
+        logger.error(f"Критическая ошибка при поиске: {e}")
+        error_message = (
+            "❌ Произошла ошибка при поиске.\n\n"
+            "Попробуйте повторить поиск или измените параметры."
+        )
+        keyboard = [
+            [InlineKeyboardButton("🔄 Новый поиск", callback_data="search_by_filter")],
+            [InlineKeyboardButton("🏠 В главное меню", callback_data="back_to_main_menu")]
+        ]
+        reply_markup = InlineKeyboardMarkup(keyboard)
+        await query.edit_message_text(error_message, reply_markup=reply_markup)
+
+async def cancel_filter(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    query = update.callback_query
+    if query:
+        await query.answer()
+        await query.edit_message_text('Поиск отменён.')
+    return ConversationHandler.END
+
+
+def main() -> None:
+    logger.info("Bot started")
+    application = Application.builder().token(BOT_TOKEN).build()
+
+    # Основные команды
+    application.add_handler(CommandHandler("start", start))
+    
+    # Обработчик кнопки "В главное меню" должен быть первым
+    application.add_handler(CallbackQueryHandler(back_to_main_menu, pattern="^back_to_main_menu$"))
+    
+    # ConversationHandler для фильтров
+    # Состояния для ConversationHandler (без изменений)
+CHOOSE_TYPE, CHOOSE_GENRE, CHOOSE_YEAR, CHOOSE_RATING, CHOOSE_COUNTRY, SHOW_RESULTS = range(6)
+
+async def filter_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    """Начало процесса фильтрации."""
+    context.user_data.clear()  # Очищаем предыдущие данные
+    keyboard = [
+        [InlineKeyboardButton("🏠 В главное меню", callback_data="back_to_main_menu")],
+        [
+            InlineKeyboardButton("🎬 Фильм", callback_data='type_movie'),
+            InlineKeyboardButton("📺 Сериал", callback_data='type_series')
+        ],
+        [InlineKeyboardButton("🎬📺 Все", callback_data='type_all')]
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    
+    if update.callback_query:
+        await update.callback_query.answer()
+        await update.callback_query.edit_message_text(
+            'Выберите тип:', 
+            reply_markup=reply_markup
+        )
+    else:
+        await update.message.reply_text(
+            'Выберите тип:', 
+            reply_markup=reply_markup
+        )
+    
+    return CHOOSE_TYPE
+
+async def choose_type(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    query = update.callback_query
+    await query.answer()
+    
+    logger.info(f"Choose type called with data: {query.data}")
+    
+    try:
+        if query.data == "back_to_main_menu":
+            logger.info("Returning to main menu from type selection")
+            return await back_to_main_menu(update, context)
+        
+        if query.data == "back_to_type":
+            logger.info("Returning to type selection")
+            keyboard = [
+                [InlineKeyboardButton("🏠 В главное меню", callback_data="back_to_main_menu")],
+                [
+                    InlineKeyboardButton("🎬 Фильм", callback_data='type_movie'),
+                    InlineKeyboardButton("📺 Сериал", callback_data='type_series')
+                ],
+                [InlineKeyboardButton("🎬📺 Все", callback_data='type_all')],
+                [InlineKeyboardButton("⬅️ Назад", callback_data="back_to_type")]
+            ]
+            reply_markup = InlineKeyboardMarkup(keyboard)
+            await query.edit_message_text('Выберите тип:', reply_markup=reply_markup)
+            return CHOOSE_TYPE
+        
+        if query.data.startswith("type_"):
+            context.user_data['filter_type'] = query.data.split('_')[1]
+            logger.info(f"Selected type: {context.user_data['filter_type']}")
+            
+            genre_keyboard = [
+    [InlineKeyboardButton("🏠 В главное меню", callback_data="back_to_main_menu")],
+    [
+        InlineKeyboardButton("Боевик", callback_data="genre_28"),
+        InlineKeyboardButton("Комедия", callback_data="genre_35")
+    ],
+    [
+        InlineKeyboardButton("Драма", callback_data="genre_18"),
+        InlineKeyboardButton("Фантастика", callback_data="genre_878")
+    ],
+    [InlineKeyboardButton("Любой", callback_data="skip_genre")],
+    [InlineKeyboardButton("⬅️ Назад", callback_data="back_to_type")]
+]
+            reply_markup = InlineKeyboardMarkup(genre_keyboard)
+            await query.edit_message_text("Выберите жанр:", reply_markup=reply_markup)
+            return CHOOSE_GENRE
+        
+        logger.warning(f"Unhandled type selection: {query.data}")
+        return CHOOSE_TYPE
+    
+    except Exception as e:
+        logger.error(f"Error in choose_type: {e}")
+        return CHOOSE_TYPE
+
+async def choose_genre(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    """Выбор жанра."""
+    query = update.callback_query
+    await query.answer()
+    
+    logger.info(f"Choose genre called with data: {query.data}")
+    
+    try:
+        if query.data == "back_to_type":
+            logger.info("Returning to type selection from genre")
+            keyboard = [
+                [
+                    InlineKeyboardButton("Фильм", callback_data='type_movie'),
+                    InlineKeyboardButton("Сериал", callback_data='type_series')
+                ],
+                [InlineKeyboardButton("🏠 В главное меню", callback_data="back_to_main_menu")]
+            ]
+            reply_markup = InlineKeyboardMarkup(keyboard)
+            await query.edit_message_text('Выберите тип:', reply_markup=reply_markup)
+            return CHOOSE_TYPE
+        
+        if query.data == "back_to_genre":
+            keyboard = [
+                [InlineKeyboardButton("🏠 В главное меню", callback_data="back_to_main_menu")],
+                [
+                    InlineKeyboardButton("Боевик", callback_data="genre_28"),
+                    InlineKeyboardButton("Комедия", callback_data="genre_35")
+                ],
+                [
+                    InlineKeyboardButton("Драма", callback_data="genre_18"),
+                    InlineKeyboardButton("Фантастика", callback_data="genre_878")
+                ],
+                [InlineKeyboardButton("Любой", callback_data="skip_genre")],
+                [InlineKeyboardButton("⬅️ Назад", callback_data="back_to_type")],
+            ]
+            reply_markup = InlineKeyboardMarkup(keyboard)
+            await query.edit_message_text("Выберите жанр:", reply_markup=reply_markup)
+            return CHOOSE_GENRE
+        
+        if query.data.startswith("genre_") or query.data == "skip_genre":
+            if query.data.startswith("genre_"):
+                context.user_data['filter_genre'] = query.data.split('_')[1]
+                logger.info(f"Selected genre: {context.user_data['filter_genre']}")
+            else:
+                context.user_data['filter_genre'] = None
+                logger.info("Genre skipped")
+            
+            keyboard = [
+                [InlineKeyboardButton("🏠 В главное меню", callback_data="back_to_main_menu")],
+                [
+                    InlineKeyboardButton("2020-2023", callback_data="year_2020-2023"),
+                    InlineKeyboardButton("2010-2019", callback_data="year_2010-2019")
+                ],
+                [
+                    InlineKeyboardButton("2000-2009", callback_data="year_2000-2009"),
+                    InlineKeyboardButton("До 2000", callback_data="year_pre2000")
+                ],
+                [InlineKeyboardButton("Любой", callback_data="skip_year")],
+                [InlineKeyboardButton("⬅️ Назад", callback_data="back_to_genre")],              
+            ]
+            reply_markup = InlineKeyboardMarkup(keyboard)
+            await query.edit_message_text("Выберите год выпуска:", reply_markup=reply_markup)
+            return CHOOSE_YEAR
+        
+        logger.warning(f"Unhandled genre selection: {query.data}")
+        return CHOOSE_GENRE
+    
+    except Exception as e:
+        logger.error(f"Error in choose_genre: {e}")
+        return CHOOSE_GENRE
+
+async def choose_year(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    """Выбор года."""
+    query = update.callback_query
+    await query.answer()
+    
+    logger.info(f"Choose year called with data: {query.data}")
+    
+    try:
+        if query.data == "back_to_genre":
+            logger.info("Returning to genre selection from year")
+            genre_keyboard = [
+                [InlineKeyboardButton("🏠 В главное меню", callback_data="back_to_main_menu")],
+                [
+                    InlineKeyboardButton("Боевик", callback_data="genre_28"),
+                    InlineKeyboardButton("Комедия", callback_data="genre_35")
+                ],
+                [
+                    InlineKeyboardButton("Драма", callback_data="genre_18"),
+                    InlineKeyboardButton("Фантастика", callback_data="genre_878")
+                ],
+                [InlineKeyboardButton("Любой", callback_data="skip_genre")],
+                [InlineKeyboardButton("⬅️ Назад", callback_data="back_to_type")]
+            ]
+            reply_markup = InlineKeyboardMarkup(genre_keyboard)
+            await query.edit_message_text("Выберите жанр:", reply_markup=reply_markup)
+            return CHOOSE_GENRE
+        
+        if query.data == "back_to_year":
+            keyboard = [
+    [InlineKeyboardButton("🏠 В главное меню", callback_data="back_to_main_menu")],
+    [
+        InlineKeyboardButton("2020-2023", callback_data="year_2020-2023"),
+        InlineKeyboardButton("2010-2019", callback_data="year_2010-2019")
+    ],
+    [
+        InlineKeyboardButton("2000-2009", callback_data="year_2000-2009"),
+        InlineKeyboardButton("До 2000", callback_data="year_pre2000")
+    ],
+    [InlineKeyboardButton("Любой", callback_data="skip_year")],
+    [InlineKeyboardButton("⬅️ Назад", callback_data="back_to_genre")]
+]
+            reply_markup = InlineKeyboardMarkup(keyboard)
+            await query.edit_message_text("Выберите год выпуска:", reply_markup=reply_markup)
+            return CHOOSE_YEAR
+        
+        if query.data.startswith("year_") or query.data == "skip_year":
+            if query.data.startswith("year_"):
+                context.user_data['filter_year'] = query.data.split('_')[1]
+                logger.info(f"Selected year: {context.user_data['filter_year']}")
+            else:
+                context.user_data['filter_year'] = None
+                logger.info("Year skipped")
+            
+            keyboard = [
+                [InlineKeyboardButton("🏠 В главное меню", callback_data="back_to_main_menu")],
+                [
+                    InlineKeyboardButton("Более 8", callback_data="rating_high"),
+                    InlineKeyboardButton("От 5 до 8", callback_data="rating_medium"),
+                    InlineKeyboardButton("Меньше 5", callback_data="rating_low")
+                ],
+                [InlineKeyboardButton("Любой", callback_data="skip_rating")],
+                [InlineKeyboardButton("⬅️ Назад", callback_data="back_to_year")],
+            ]
+            reply_markup = InlineKeyboardMarkup(keyboard)
+            await query.edit_message_text("Выберите рейтинг:", reply_markup=reply_markup)
+            return CHOOSE_RATING
+        
+        logger.warning(f"Unhandled year selection: {query.data}")
+        return CHOOSE_YEAR
+    
+    except Exception as e:
+        logger.error(f"Error in choose_year: {e}")
+        return CHOOSE_YEAR
+
+async def choose_rating(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    """Выбор рейтинга."""
+    query = update.callback_query
+    await query.answer()
+    
+    logger.info(f"Choose rating called with data: {query.data}")
+    
+    try:
+        if query.data == "back_to_year":
+            logger.info("Returning to year selection from rating")
+            keyboard = [
+                [InlineKeyboardButton("🏠 В главное меню", callback_data="back_to_main_menu")],
+                [
+                    InlineKeyboardButton("2020-2023", callback_data="year_2020-2023"),
+                    InlineKeyboardButton("2010-2019", callback_data="year_2010-2019")
+                ],
+                [
+                    InlineKeyboardButton("2000-2009", callback_data="year_2000-2009"),
+                    InlineKeyboardButton("До 2000", callback_data="year_pre2000")
+                ],
+                [InlineKeyboardButton("Любой", callback_data="skip_year")],
+                [InlineKeyboardButton("⬅️ Назад", callback_data="back_to_genre")],
+            ]
+            reply_markup = InlineKeyboardMarkup(keyboard)
+            await query.edit_message_text("Выберите год выпуска:", reply_markup=reply_markup)
+            return CHOOSE_YEAR
+        
+        if query.data == "back_to_rating":
+            keyboard = [
+                [InlineKeyboardButton("🏠 В главное меню", callback_data="back_to_main_menu")],
+                [
+                    InlineKeyboardButton("Более 8", callback_data="rating_high"),
+                    InlineKeyboardButton("От 5 до 8", callback_data="rating_medium"),
+                    InlineKeyboardButton("Меньше 5", callback_data="rating_low")
+                ],
+                [InlineKeyboardButton("Любой", callback_data="skip_rating")],
+                [InlineKeyboardButton("⬅️ Назад", callback_data="back_to_year")]
+            ]
+            reply_markup = InlineKeyboardMarkup(keyboard)
+            await query.edit_message_text("Выберите рейтинг:", reply_markup=reply_markup)
+            return CHOOSE_RATING
+        
+        if query.data.startswith("rating_") or query.data == "skip_rating":
+            if query.data.startswith("rating_"):
+                context.user_data['filter_rating'] = query.data.split('_')[1]
+                logger.info(f"Selected rating: {context.user_data['filter_rating']}")
+            else:
+                context.user_data['filter_rating'] = None
+                logger.info("Rating skipped")
+            
+            main_countries = [
+                'США', 'Россия', 
+                'Великобритания', 'Франция',
+                'Германия', 'Япония',
+                'Южная Корея', 'Китай',
+                'Италия', 'Испания',
+                'Канада', 'Австралия',
+                'Индия', 'Бразилия'
+            ]
+            
+            country_buttons = []
+            for i in range(0, len(main_countries), 2):
+                row = []
+                row.append(InlineKeyboardButton(main_countries[i], callback_data=f"country_{main_countries[i]}"))
+                
+                if i + 1 < len(main_countries):
+                    row.append(InlineKeyboardButton(main_countries[i+1], callback_data=f"country_{main_countries[i+1]}"))
+                
+                country_buttons.append(row)
+            
+            # Сначала кнопка "В главное меню", затем страны и навигационные кнопки
+            keyboard = [
+                [InlineKeyboardButton("🏠 В главное меню", callback_data="back_to_main_menu")]
+            ] + country_buttons + [
+                [InlineKeyboardButton("Любая", callback_data="skip_country")],
+                [InlineKeyboardButton("⬅️ Назад", callback_data="back_to_rating")]
+            ]
+            reply_markup = InlineKeyboardMarkup(keyboard)
+            await query.edit_message_text("Выберите страну:", reply_markup=reply_markup)
+            return CHOOSE_COUNTRY
+        
+        logger.warning(f"Unhandled rating selection: {query.data}")
+        return CHOOSE_RATING
+    
+    except Exception as e:
+        logger.error(f"Error in choose_rating: {e}")
+        return CHOOSE_RATING
+
+async def choose_country(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    """Выбор страны."""
+    query = update.callback_query
+    await query.answer()
+    
+    logger.info(f"Choose country called with data: {query.data}")
+    
+    try:
+        if query.data == "back_to_rating":
+            logger.info("Returning to rating selection from country")
+            keyboard = [
+                [InlineKeyboardButton("🏠 В главное меню", callback_data="back_to_main_menu")],
+                [
+                    InlineKeyboardButton("Более 8", callback_data="rating_high"),
+                    InlineKeyboardButton("От 5 до 8", callback_data="rating_medium"),
+                    InlineKeyboardButton("Меньше 5", callback_data="rating_low")
+                ],
+                [InlineKeyboardButton("Любой", callback_data="skip_rating")],
+                [InlineKeyboardButton("⬅️ Назад", callback_data="back_to_year")],
+            ]
+            reply_markup = InlineKeyboardMarkup(keyboard)
+            await query.edit_message_text("Выберите рейтинг:", reply_markup=reply_markup)
+            return CHOOSE_RATING
+        
+        if query.data == "back_to_country":
+            main_countries = [
+                'США', 'Россия', 
+                'Великобритания', 'Франция',
+                'Германия', 'Япония',
+                'Южная Корея', 'Китай',
+                'Италия', 'Испания',
+                'Канада', 'Австралия',
+                'Индия', 'Бразилия',
+                'Мексика'
+            ]
+            
+            country_buttons = []
+            for i in range(0, len(main_countries), 2):
+                row = []
+                row.append(InlineKeyboardButton(main_countries[i], callback_data=f"country_{main_countries[i]}"))
+                if i + 1 < len(main_countries):
+                    row.append(InlineKeyboardButton(main_countries[i+1], callback_data=f"country_{main_countries[i+1]}"))
+                country_buttons.append(row)
+
+            keyboard = [
+                [InlineKeyboardButton("🏠 В главное меню", callback_data="back_to_main_menu")]
+            ] + country_buttons + [
+                [InlineKeyboardButton("Любая", callback_data="skip_country")],
+                [InlineKeyboardButton("⬅️ Назад", callback_data="back_to_rating")]
+            ]
+            reply_markup = InlineKeyboardMarkup(keyboard)
+            await query.edit_message_text("Выберите страну:", reply_markup=reply_markup)
+            return CHOOSE_COUNTRY
+        
+        if query.data.startswith("country_") or query.data == "skip_country":
+            if query.data.startswith("country_"):
+                context.user_data['filter_country'] = query.data.split('_')[1]
+                logger.info(f"Selected country: {context.user_data['filter_country']}")
+            else:
+                context.user_data['filter_country'] = None
+                logger.info("Country skipped")
+            
+            # Показываем опции сортировки
+            keyboard = [
+                [InlineKeyboardButton("🏠 В главное меню", callback_data="back_to_main_menu")],
+                [InlineKeyboardButton("По популярности ⭐", callback_data="sort_popularity")],
+                [InlineKeyboardButton("По рейтингу 📊", callback_data="sort_rating")],
+                [InlineKeyboardButton("По дате выхода 📅", callback_data="sort_date")],
+                [InlineKeyboardButton("⬅️ Назад", callback_data="back_to_country")]
+            ]
+            reply_markup = InlineKeyboardMarkup(keyboard)
+            await query.edit_message_text("Выберите способ сортировки:", reply_markup=reply_markup)
+            return CHOOSE_SORT
+        
+        logger.warning(f"Unhandled country selection: {query.data}")
+        return CHOOSE_COUNTRY
+    
+    except Exception as e:
+        logger.error(f"Error in choose_country: {e}")
+        return CHOOSE_COUNTRY
+    
+async def choose_sort(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    """Выбор способа сортировки."""
+    query = update.callback_query
+    await query.answer()
+    
+    logger.info(f"Choose sort called with data: {query.data}")
+    
+    try:
+        if query.data == "back_to_country":
+            main_countries = [
+                'США', 'Россия', 
+                'Великобритания', 'Франция',
+                'Германия', 'Япония',
+                'Южная Корея', 'Китай',
+                'Италия', 'Испания',
+                'Канада', 'Австралия',
+                'Индия', 'Бразилия'
+            ]
+            
+            country_buttons = []
+            for i in range(0, len(main_countries), 2):
+                row = []
+                row.append(InlineKeyboardButton(main_countries[i], callback_data=f"country_{main_countries[i]}"))
+                if i + 1 < len(main_countries):
+                    row.append(InlineKeyboardButton(main_countries[i+1], callback_data=f"country_{main_countries[i+1]}"))
+                country_buttons.append(row)
+            
+            keyboard = [
+                [InlineKeyboardButton("🏠 В главное меню", callback_data="back_to_main_menu")]
+            ] + country_buttons + [
+                [InlineKeyboardButton("Любая", callback_data="skip_country")],
+                [InlineKeyboardButton("⬅️ Назад", callback_data="back_to_rating")]
+            ]
+            reply_markup = InlineKeyboardMarkup(keyboard)
+            await query.edit_message_text("Выберите страну:", reply_markup=reply_markup)
+            return CHOOSE_COUNTRY
+        
+        if query.data.startswith("sort_"):
+            sort_type = query.data.split('_')[1]
+            sort_params = {
+                'popularity': 'popularity.desc',
+                'rating': 'vote_average.desc',
+                'date': 'primary_release_date.desc'
+            }
+            context.user_data['sort_by'] = sort_params.get(sort_type)
+            logger.info(f"Selected sort type: {sort_type} -> {context.user_data['sort_by']}")
+            
+            await perform_filtered_search(update, context)
+            return ConversationHandler.END
+        
+        logger.warning(f"Unhandled sort selection: {query.data}")
+        return CHOOSE_SORT
+    
+    except Exception as e:
+        logger.error(f"Error in choose_sort: {e}")
+        return CHOOSE_SORT
+
+# В функции main() обновите ConversationHandler:
+def main() -> None:
+    logger.info("Bot started")
+    application = Application.builder().token(BOT_TOKEN).build()
+
+    application.add_handler(CommandHandler("start", start))
+    
+    # Обработчик кнопки "В главное меню" должен быть первым
+    application.add_handler(CallbackQueryHandler(back_to_main_menu, pattern="^back_to_main_menu$"))
+    
+    # Добавьте этот обработчик явно
+    application.add_handler(CallbackQueryHandler(handle_main_menu_selection, pattern="^search_by_filter$"))
+    
+    # ConversationHandler для фильтров
+    conv_handler = ConversationHandler(
+        entry_points=[
+            CommandHandler("filter", filter_command),
+            CallbackQueryHandler(choose_type, pattern="^search_by_filter$"),
+            CallbackQueryHandler(choose_type, pattern="^type_")
+        ],
+        states={
+            CHOOSE_TYPE: [
+                CallbackQueryHandler(choose_type, pattern="^type_"),
+                CallbackQueryHandler(back_to_main_menu, pattern="^back_to_main_menu$"),
+                CallbackQueryHandler(handle_main_menu_selection, pattern="^back_to_type$")
+            ],
+            CHOOSE_GENRE: [
+                CallbackQueryHandler(choose_genre, pattern="^genre_"),
+                CallbackQueryHandler(choose_genre, pattern="^skip_genre$"),
+                CallbackQueryHandler(choose_type, pattern="^back_to_type$"),
+                CallbackQueryHandler(back_to_main_menu, pattern="^back_to_main_menu$")
+            ],
+            CHOOSE_YEAR: [
+                CallbackQueryHandler(choose_year, pattern="^year_"),
+                CallbackQueryHandler(choose_year, pattern="^skip_year$"),
+                CallbackQueryHandler(choose_genre, pattern="^back_to_genre$"),
+                CallbackQueryHandler(back_to_main_menu, pattern="^back_to_main_menu$")
+            ],
+            CHOOSE_RATING: [
+                CallbackQueryHandler(choose_rating, pattern="^rating_"),
+                CallbackQueryHandler(choose_rating, pattern="^skip_rating$"),
+                CallbackQueryHandler(choose_year, pattern="^back_to_year$"),
+                CallbackQueryHandler(back_to_main_menu, pattern="^back_to_main_menu$")
+            ],
+            CHOOSE_COUNTRY: [
+                CallbackQueryHandler(choose_country, pattern="^country_"),
+                CallbackQueryHandler(choose_country, pattern="^skip_country$"),
+                CallbackQueryHandler(choose_rating, pattern="^back_to_rating$"),
+                CallbackQueryHandler(back_to_main_menu, pattern="^back_to_main_menu$")
+            ],
+            CHOOSE_SORT: [
+                CallbackQueryHandler(choose_sort, pattern="^sort_"),
+                CallbackQueryHandler(choose_country, pattern="^back_to_country$"),
+                CallbackQueryHandler(back_to_main_menu, pattern="^back_to_main_menu$")
+            ]
+        },
+        fallbacks=[
+            CallbackQueryHandler(back_to_main_menu, pattern="^back_to_main_menu$")
+        ],
+        allow_reentry=True
+    )
+    
+    application.add_handler(conv_handler)
+    application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, process_search))
+    application.add_handler(CallbackQueryHandler(show_movie_details, pattern="^details_"))
+    application.add_handler(CallbackQueryHandler(expand_description, pattern="^expand_"))
+    application.add_handler(CallbackQueryHandler(collapse_description, pattern="^collapse_"))
+    application.add_handler(CallbackQueryHandler(handle_pagination, pattern="^page_|^back_to_list"))
+    application.add_handler(CallbackQueryHandler(handle_main_menu_selection, pattern="^search_by_title$"))
+
+    application.run_polling()
+
+if __name__ == "__main__":
+    main()
