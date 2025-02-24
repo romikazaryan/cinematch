@@ -1,4 +1,4 @@
-// src/app/App.jsx
+// Обновленный src/app/App.jsx с дополнительной отладкой
 import React, { useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
 import { store } from "@/store/store";
@@ -7,65 +7,55 @@ import HomePage from "@/pages/HomePage";
 import SearchPage from "@/pages/SearchPage";
 import FilterPage from "@/pages/FilterPage";
 import FavoritesPage from "@/pages/FavoritesPage";
-import CategoryPage from "@/pages/CategoryPage";
 import { useTelegram } from "@/hooks/useTelegram";
+
+// Добавляем это для отладки - проверка загрузки компонентов
+console.log("App.jsx is loading");
+console.log("NavigationLayout imported:", typeof NavigationLayout);
+console.log("HomePage imported:", typeof HomePage);
+console.log("SearchPage imported:", typeof SearchPage);
 
 function AppContent() {
   const { colorScheme, isWebAppAvailable, tg } = useTelegram();
+  // Принудительно устанавливаем домашнюю страницу
   const [currentPage, setCurrentPage] = useState('home');
-  const [categoryParams, setCategoryParams] = useState(null);
-
+  
   useEffect(() => {
-    // При монтировании компонента сообщаем Telegram, что приложение готово
+    // Логируем что рендерится и какие компоненты доступны
+    console.log("AppContent rendered, current page:", currentPage);
+    console.log("Telegram availability:", isWebAppAvailable);
+    
     if (isWebAppAvailable) {
       tg.ready();
-      
-      // Проверяем, есть ли параметры страницы в URL или инициализационных данных
-      const urlParams = new URLSearchParams(window.location.search);
-      const startParam = urlParams.get('page') || 'home';
-      
-      // Устанавливаем начальную страницу
-      if (startParam && startParam !== currentPage) {
-        setCurrentPage(startParam);
-      }
     }
-  }, [isWebAppAvailable]);
+  }, [currentPage, isWebAppAvailable]);
 
-  // Функция для навигации между страницами
-  const navigateTo = (page, params = null) => {
-    if (typeof page === 'object' && page.name) {
-      // Формат { name: 'category', params: { category: 'popular' } }
-      setCurrentPage(page.name);
-      setCategoryParams(page.params);
-    } else {
-      // Простой формат 'home', 'search', и т.д.
-      setCurrentPage(page);
-      setCategoryParams(null);
-    }
+  const navigateTo = (page) => {
+    console.log("Navigating to:", page);
+    setCurrentPage(typeof page === 'object' ? page.name : page);
   };
 
   const renderContent = () => {
-    switch(currentPage) {
-      case 'home':
-        return <HomePage onNavigate={navigateTo} />;
-      case 'search':
-        return <SearchPage />;
-      case 'filters':
-        return <FilterPage />;
-      case 'favorites':
-        return <FavoritesPage />;
-      case 'category':
-        return categoryParams ? (
-          <CategoryPage 
-            category={categoryParams.category} 
-            onBack={() => navigateTo('home')} 
-          />
-        ) : (
-          <HomePage onNavigate={navigateTo} />
-        );
-      default:
-        return <HomePage onNavigate={navigateTo} />;
-    }
+    console.log("Rendering content for page:", currentPage);
+    
+    // Временно отображаем информацию для отладки
+    const debugInfo = (
+      <div className="fixed top-0 right-0 bg-black bg-opacity-70 text-white p-2 text-xs z-50">
+        Page: {currentPage}
+      </div>
+    );
+    
+    // Всегда отображаем NavigationLayout и текущую страницу
+    // Временно принудительно отображаем все страницы для отладки
+    return (
+      <>
+        {debugInfo}
+        {currentPage === 'home' && <HomePage onNavigate={navigateTo} />}
+        {currentPage === 'search' && <SearchPage />}
+        {currentPage === 'filters' && <FilterPage />}
+        {currentPage === 'favorites' && <FavoritesPage />}
+      </>
+    );
   };
 
   return (
@@ -78,6 +68,7 @@ function AppContent() {
 }
 
 function App() {
+  console.log("Rendering App component");
   return (
     <Provider store={store}>
       <AppContent />
