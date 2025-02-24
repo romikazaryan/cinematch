@@ -1,5 +1,10 @@
+// src/pages/CategoryPage.jsx
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft } from 'lucide-react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchCategoryMovies } from '@/store/moviesSlice';
+import MovieCard from "@/components/movies/MovieCard/MovieCard";
+import { useTelegram } from '@/hooks/useTelegram';
 
 const categoryTitles = {
   popular: 'Популярные фильмы',
@@ -8,92 +13,47 @@ const categoryTitles = {
   upcoming: 'Скоро в кино'
 };
 
-const TMDB_API_KEY = '854c15015f24286eb442e0484ec6f445';
-const BASE_URL = 'https://api.themoviedb.org/3';
-
 const CategoryPage = ({ category, onBack }) => {
-  const [movies, setMovies] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
+  const dispatch = useDispatch();
+  const { sendToBot } = useTelegram();
+  const { 
+    items: movies, 
+    loading, 
+    error, 
+    currentPage, 
+    totalPages 
+  } = useSelector(state => state.movies.categoryPage);
 
-  // Функция для загрузки фильмов
-  const fetchMovies = async (page) => {
-    setLoading(true);
-    setError(null);
-    
-    try {
-      const response = await fetch(
-        `${BASE_URL}/movie/${category}?api_key=${TMDB_API_KEY}&language=ru&page=${page}`
-      );
-      const data = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(data.status_message || 'Произошла ошибка при загрузке фильмов');
-      }
-      
-      setMovies(data.results);
-      setTotalPages(Math.min(data.total_pages, 20)); // Ограничиваем до 20 страниц
-      setCurrentPage(page);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Загружаем фильмы при монтировании и смене категории
   useEffect(() => {
-    fetchMovies(1);
-  }, [category]);
+    // Загружаем фильмы при монтировании и смене категории
+    dispatch(fetchCategoryMovies({ category, page: 1 }));
+  }, [category, dispatch]);
 
-  // Функция для получения URL постера
-  const getPosterUrl = (path) => {
-    if (!path) return '/placeholder.jpg';
-    return `https://image.tmdb.org/t/p/w500${path}`;
+  const handlePageChange = (page) => {
+    dispatch(fetchCategoryMovies({ category, page }));
   };
 
-  // Компонент карточки фильма
-  const MovieCard = ({ movie, onClick }) => (
-    <div 
-      onClick={onClick}
-      className="bg-white rounded-lg shadow hover:shadow-lg transition-shadow cursor-pointer overflow-hidden"
-    >
-      <div className="relative">
-        <img 
-          src={getPosterUrl(movie.poster_path)} 
-          alt={movie.title}
-          className="w-full h-64 object-cover"
-          onError={(e) => {
-            e.target.src = '/placeholder.jpg';
-          }}
-        />
-        {movie.vote_average > 0 && (
-          <div className="absolute top-2 right-2 bg-black bg-opacity-70 text-white px-2 py-1 rounded-full text-sm">
-            ⭐ {movie.vote_average.toFixed(1)}
-          </div>
-        )}
-      </div>
-      
-      <div className="p-4">
-        <h3 className="font-semibold text-lg truncate">
-          {movie.title}
-        </h3>
-        <p className="text-gray-600">
-          {new Date(movie.release_date).getFullYear()}
-        </p>
-      </div>
-    </div>
-  );
+  const handleMovieSelect = (movie) => {
+    sendToBot({
+      type: 'MOVIE_SELECTED',
+      payload: {
+        id: movie.id,
+        title: movie.title,
+        year: new Date(movie.release_date).getFullYear(),
+        rating: movie.vote_average,
+        posterPath: movie.poster_path,
+        overview: movie.overview
+      }
+    });
+  };
 
   // Компонент пагинации
   const Pagination = () => (
     <div className="flex justify-center gap-2 mt-6">
       <button
-        onClick={() => fetchMovies(currentPage - 1)}
+        onClick={() => handlePageChange(currentPage - 1)}
         disabled={currentPage <= 1}
-        className="px-4 py-2 rounded-lg bg-gray-100 disabled:opacity-50"
+        className="px-4 py-2 rounded-lg bg-gray-100 disabled:opacity-50 dark:bg-gray-700 dark:text-white"
       >
         Предыдущая
       </button>
@@ -111,11 +71,11 @@ const CategoryPage = ({ category, onBack }) => {
           return (
             <button
               key={pageNum}
-              onClick={() => fetchMovies(pageNum)}
+              onClick={() => handlePageChange(pageNum)}
               className={`px-4 py-2 rounded-lg ${
                 currentPage === pageNum 
                   ? 'bg-blue-500 text-white' 
-                  : 'bg-gray-100'
+                  : 'bg-gray-100 dark:bg-gray-700 dark:text-white'
               }`}
             >
               {pageNum}
@@ -125,42 +85,28 @@ const CategoryPage = ({ category, onBack }) => {
       </div>
       
       <button
-        onClick={() => fetchMovies(currentPage + 1)}
+        onClick={() => handlePageChange(currentPage + 1)}
         disabled={currentPage >= totalPages}
-        className="px-4 py-2 rounded-lg bg-gray-100 disabled:opacity-50"
+        className="px-4 py-2 rounded-lg bg-gray-100 disabled:opacity-50 dark:bg-gray-700 dark:text-white"
       >
         Следующая
       </button>
     </div>
   );
 
-  const handleMovieSelect = (movie) => {
-    window.Telegram?.WebApp?.sendData(JSON.stringify({
-      type: 'MOVIE_SELECTED',
-      payload: {
-        id: movie.id,
-        title: movie.title,
-        year: new Date(movie.release_date).getFullYear(),
-        rating: movie.vote_average,
-        posterPath: movie.poster_path,
-        overview: movie.overview
-      }
-    }));
-  };
-
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50">
+    <div className="flex flex-col min-h-screen">
       {/* Шапка */}
-      <header className="sticky top-0 z-10 bg-white shadow-sm">
+      <header className="sticky top-0 z-10 bg-white dark:bg-gray-800 shadow-sm">
         <div className="flex items-center px-4 h-14">
           <button
             onClick={onBack}
-            className="p-2 -ml-2 rounded-full hover:bg-gray-100 transition-colors"
+            className="p-2 -ml-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
           >
             <ChevronLeft className="w-6 h-6" />
           </button>
           <h1 className="text-xl font-semibold ml-2">
-            {categoryTitles[category]}
+            {categoryTitles[category] || 'Категория'}
           </h1>
         </div>
       </header>
@@ -175,7 +121,7 @@ const CategoryPage = ({ category, onBack }) => {
           <div className="text-center py-8">
             <p className="text-red-500 mb-4">{error}</p>
             <button
-              onClick={() => fetchMovies(currentPage)}
+              onClick={() => handlePageChange(currentPage)}
               className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
             >
               Повторить попытку
