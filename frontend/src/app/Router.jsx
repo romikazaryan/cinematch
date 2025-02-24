@@ -1,24 +1,24 @@
 // src/app/Router.jsx
+import React from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import MovieList from '../components/movies/MovieList';
-import MovieDetails from '../components/movies/MovieDetails';
-import SearchPage from '../components/pages/SearchPage';
+import App from './App';
+import SearchPage from '../pages/SearchPage';
 
+// Создаем простой роутер для отладки
 const router = createBrowserRouter([
   {
     path: '/',
+    element: <App />,
+  },
+  {
+    path: '/search',
     element: <SearchPage />,
-  },
-  {
-    path: '/movies',
-    element: <MovieList />,
-  },
-  {
-    path: '/movies/:id',
-    element: <MovieDetails />,
-  },
+  }
 ]);
 
 export function Router() {
+  console.log('Router component rendering');
   return <RouterProvider router={router} />;
 }
+
+export default Router;
