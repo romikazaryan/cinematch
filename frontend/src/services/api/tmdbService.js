@@ -33,27 +33,6 @@ export const tmdbService = {
     return `${IMG_URL}/${size}${path}`;
   },
 
-  async getNowPlaying(page = 1) {
-    const response = await fetch(
-      `${BASE_URL}/movie/now_playing?api_key=${TMDB_API_KEY}&language=ru&page=${page}`
-    );
-    return await response.json();
-  },
-
-  async getTopRated(page = 1) {
-    const response = await fetch(
-      `${BASE_URL}/movie/top_rated?api_key=${TMDB_API_KEY}&language=ru&page=${page}`
-    );
-    return await response.json();
-  },
-
-  async getUpcoming(page = 1) {
-    const response = await fetch(
-      `${BASE_URL}/movie/upcoming?api_key=${TMDB_API_KEY}&language=ru&page=${page}`
-    );
-    return await response.json();
-  }
-
   async getPopularMovies(page = 1) {
     try {
       const response = await fetch(
@@ -101,5 +80,4 @@ export const tmdbService = {
       throw error;
     }
   }
-
 };
