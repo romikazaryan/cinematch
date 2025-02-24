@@ -1,7 +1,7 @@
 // src/pages/SearchPage.jsx
 import React, { useState } from 'react';
 import SearchBar from "@/components/search/SearchBar";
-import MovieList from "@/components/movies/MovieList";
+import MovieList from "@/components/movies/MovieList/MovieList";
 import { useMovieSearch } from "@/hooks/useMovieSearch";
 import { useTelegram } from "@/hooks/useTelegram";
 
