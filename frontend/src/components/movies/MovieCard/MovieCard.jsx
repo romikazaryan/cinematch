@@ -1,23 +1,25 @@
 // src/components/movies/MovieCard/MovieCard.jsx
 import React from 'react';
-import { tmdbService } from '../../../services/api/tmdbService';
+import { tmdbService } from '@/services/api/tmdbService';
 
-const MovieCard = ({ movie, onClick }) => {
+const MovieCard = ({ movie, onClick, compact = false }) => {
   const title = movie.title || movie.name;
   const year = new Date(movie.release_date || movie.first_air_date).getFullYear();
-  const posterPath = tmdbService.getImageUrl(movie.poster_path);
+  const posterPath = tmdbService.getImageUrl(movie.poster_path, compact ? 'w185' : 'w500');
   const rating = movie.vote_average?.toFixed(1);
 
   return (
     <div 
-      className="bg-white rounded-lg shadow hover:shadow-lg transition-shadow cursor-pointer"
+      className={`bg-white rounded-lg shadow hover:shadow-lg transition-shadow cursor-pointer
+        ${compact ? '' : 'h-full'}`}
       onClick={onClick}
     >
       <div className="relative">
         <img 
           src={posterPath} 
           alt={title}
-          className="w-full h-48 object-cover rounded-t-lg"
+          className={`w-full object-cover rounded-t-lg
+            ${compact ? 'h-48' : 'h-64'}`}
           onError={(e) => {
             e.target.src = '/placeholder.jpg';
           }}
@@ -29,20 +31,13 @@ const MovieCard = ({ movie, onClick }) => {
         )}
       </div>
       
-      <div className="p-4">
-        <h3 className="font-semibold text-lg truncate">{title}</h3>
-        <p className="text-gray-600">{year || 'Нет даты'}</p>
-        <div className="mt-2 flex flex-wrap gap-1">
-          {movie.genre_ids?.slice(0, 2).map((genreId) => (
-            <span 
-              key={genreId} 
-              className="text-xs bg-gray-100 px-2 py-1 rounded-full"
-            >
-              {/* Здесь можно добавить преобразование ID жанра в название */}
-              {genreId}
-            </span>
-          ))}
-        </div>
+      <div className={`p-${compact ? '2' : '4'}`}>
+        <h3 className={`font-semibold ${compact ? 'text-sm' : 'text-lg'} truncate`}>
+          {title}
+        </h3>
+        {!compact && (
+          <p className="text-gray-600">{year || 'Нет даты'}</p>
+        )}
       </div>
     </div>
   );

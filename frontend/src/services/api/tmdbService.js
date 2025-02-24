@@ -31,5 +31,75 @@ export const tmdbService = {
   getImageUrl(path, size = 'w500') {
     if (!path) return '/placeholder.jpg';
     return `${IMG_URL}/${size}${path}`;
+  },
+
+  async getNowPlaying(page = 1) {
+    const response = await fetch(
+      `${BASE_URL}/movie/now_playing?api_key=${TMDB_API_KEY}&language=ru&page=${page}`
+    );
+    return await response.json();
+  },
+
+  async getTopRated(page = 1) {
+    const response = await fetch(
+      `${BASE_URL}/movie/top_rated?api_key=${TMDB_API_KEY}&language=ru&page=${page}`
+    );
+    return await response.json();
+  },
+
+  async getUpcoming(page = 1) {
+    const response = await fetch(
+      `${BASE_URL}/movie/upcoming?api_key=${TMDB_API_KEY}&language=ru&page=${page}`
+    );
+    return await response.json();
   }
+
+  async getPopularMovies(page = 1) {
+    try {
+      const response = await fetch(
+        `${BASE_URL}/movie/popular?api_key=${TMDB_API_KEY}&language=ru&page=${page}`
+      );
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching popular movies:', error);
+      throw error;
+    }
+  },
+
+  async getNowPlaying(page = 1) {
+    try {
+      const response = await fetch(
+        `${BASE_URL}/movie/now_playing?api_key=${TMDB_API_KEY}&language=ru&page=${page}`
+      );
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching now playing movies:', error);
+      throw error;
+    }
+  },
+
+  async getTopRated(page = 1) {
+    try {
+      const response = await fetch(
+        `${BASE_URL}/movie/top_rated?api_key=${TMDB_API_KEY}&language=ru&page=${page}`
+      );
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching top rated movies:', error);
+      throw error;
+    }
+  },
+
+  async getUpcoming(page = 1) {
+    try {
+      const response = await fetch(
+        `${BASE_URL}/movie/upcoming?api_key=${TMDB_API_KEY}&language=ru&page=${page}`
+      );
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching upcoming movies:', error);
+      throw error;
+    }
+  }
+
 };

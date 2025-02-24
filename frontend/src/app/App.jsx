@@ -1,77 +1,40 @@
 // src/app/App.jsx
-import React, { useState } from 'react';
+import React from 'react';
 import { Provider } from 'react-redux';
-import SearchBar from "@/components/search/SearchBar";
-import MovieList from "@/components/movies/MovieList"; // Исправлен путь
-import { useMovieSearch } from "@/hooks/useMovieSearch";
-import { useTelegram } from "@/hooks/useTelegram";
 import { store } from "@/store/store";
-
-// Остальной код без изменений
+import NavigationLayout from "@/components/layout/NavigationLayout";
+import HomePage from "@/pages/HomePage";
+import SearchPage from "@/pages/SearchPage";
+import FilterPage from "@/pages/FilterPage";
+import FavoritesPage from "@/pages/FavoritesPage";
+import { useTelegram } from "@/hooks/useTelegram";
 
 function AppContent() {
-  const { colorScheme, sendToBot } = useTelegram();
-  const [searchQuery, setSearchQuery] = useState('');
-  const { movies, loading, error, page, totalPages, setPage } = useMovieSearch(searchQuery);
+  const { colorScheme } = useTelegram();
+  const [currentPage, setCurrentPage] = React.useState('home');
 
-  const handleMovieSelect = (movie) => {
-    sendToBot({
-      type: 'MOVIE_SELECTED',
-      payload: {
-        id: movie.id,
-        title: movie.title || movie.name,
-        type: movie.media_type,
-        year: new Date(movie.release_date || movie.first_air_date).getFullYear(),
-        rating: movie.vote_average
-      }
-    });
+  const renderContent = () => {
+    switch(currentPage) {
+      case 'home':
+        return <HomePage />;
+      case 'search':
+        return <SearchPage />;
+      case 'filters':
+        return <FilterPage />;
+      case 'favorites':
+        return <FavoritesPage />;
+      case 'category':
+        return <CategoryPage category={currentPage.params.category} />;
+      default:
+        return <HomePage />;
+    }
   };
 
   return (
-    <div className={`min-h-screen p-4 ${colorScheme}`}>
-      <SearchBar 
-        value={searchQuery}
-        onChange={setSearchQuery}
-      />
-      
-      {loading ? (
-        <div className="flex justify-center">
-          <span className="animate-spin">🔄</span>
-        </div>
-      ) : error ? (
-        <div className="text-red-500 text-center">
-          {error}
-        </div>
-      ) : (
-        <>
-          <MovieList 
-            movies={movies}
-            onMovieSelect={handleMovieSelect}
-          />
-          
-          {totalPages > 1 && (
-            <div className="mt-4 flex justify-center gap-2">
-              <button
-                onClick={() => setPage(p => Math.max(1, p - 1))}
-                disabled={page === 1}
-                className="px-4 py-2 bg-blue-500 text-white rounded disabled:opacity-50"
-              >
-                Назад
-              </button>
-              <span className="px-4 py-2">
-                {page} из {totalPages}
-              </span>
-              <button
-                onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-                disabled={page === totalPages}
-                className="px-4 py-2 bg-blue-500 text-white rounded disabled:opacity-50"
-              >
-                Вперед
-              </button>
-            </div>
-          )}
-        </>
-      )}
+    <div className={`min-h-screen ${colorScheme}`}>
+      <NavigationLayout onNavigate={setCurrentPage}>
+        {renderContent()}
+      </NavigationLayout>
     </div>
   );
 }

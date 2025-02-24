@@ -1,7 +1,7 @@
 // src/components/filters/FilterPanel/FilterPanel.jsx
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setFilters } from '../../../store/filtersSlice';
+import { setFilters } from '@store/filtersSlice';
 
 export function FilterPanel() {
   const dispatch = useDispatch();
