@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Telegram WebApp Debug</title>
+    <title>Тест WebApp</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -12,6 +12,29 @@
             margin: 0;
             background-color: var(--tg-theme-bg-color, white);
             color: var(--tg-theme-text-color, black);
+        }
+        .nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            background: white;
+            border-top: 1px solid #ddd;
+            height: 60px;
+        }
+        .nav-button {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            background: none;
+            cursor: pointer;
+        }
+        .active {
+            color: blue;
         }
         .button {
             display: block;
@@ -25,15 +48,48 @@
             font-size: 16px;
             cursor: pointer;
         }
+        .debug {
+            margin-top: 20px;
+            padding: 10px;
+            background: #f5f5f5;
+            border-radius: 5px;
+            font-size: 12px;
+            overflow: auto;
+        }
     </style>
 </head>
 <body>
-    <h1>Telegram WebApp Debug</h1>
+    <h1>Тест Telegram WebApp</h1>
     
-    <p>Это отладочная страница. Если вы видите эту страницу, HTML загружается корректно.</p>
+    <div id="content">
+        <p>Текущая страница: <span id="current-page">Главная</span></p>
+        <input type="text" placeholder="Поиск..." style="width:100%; padding:10px; margin-bottom:20px;">
+    </div>
     
     <button class="button" onclick="sendDebugInfo()">Отправить отладочную информацию</button>
-    <button class="button" onclick="testNavigation()">Тест навигации</button>
+    
+    <div class="nav">
+        <button class="nav-button active" onclick="changePage('home')">
+            <span style="font-size:24px">🏠</span>
+            <span>Главная</span>
+        </button>
+        <button class="nav-button" onclick="changePage('search')">
+            <span style="font-size:24px">🔍</span>
+            <span>Поиск</span>
+        </button>
+        <button class="nav-button" onclick="changePage('filters')">
+            <span style="font-size:24px">⚙️</span>
+            <span>Фильтры</span>
+        </button>
+        <button class="nav-button" onclick="changePage('favorites')">
+            <span style="font-size:24px">❤️</span>
+            <span>Избранное</span>
+        </button>
+    </div>
+    
+    <div class="debug" id="debug">
+        <h3>Отладочная информация:</h3>
+    </div>
     
     <script>
         // Инициализируем WebApp
@@ -41,88 +97,64 @@
             window.Telegram.WebApp.ready();
             window.Telegram.WebApp.expand();
             
-            document.write('<p style="color:green">✓ Telegram WebApp инициализирован!</p>');
+            document.getElementById('debug').innerHTML += '<p style="color:green">✓ Telegram WebApp инициализирован!</p>';
+            document.getElementById('debug').innerHTML += '<p>WebApp Version: ' + window.Telegram.WebApp.version + '</p>';
+            document.getElementById('debug').innerHTML += '<p>Theme: ' + window.Telegram.WebApp.colorScheme + '</p>';
         } else {
-            document.write('<p style="color:red">✗ Telegram WebApp не найден!</p>');
+            document.getElementById('debug').innerHTML += '<p style="color:red">✗ Telegram WebApp не найден!</p>';
         }
         
-        // Отправка отладочных данных
+        function changePage(page) {
+            document.getElementById('current-page').textContent = 
+                page === 'home' ? 'Главная' : 
+                page === 'search' ? 'Поиск' : 
+                page === 'filters' ? 'Фильтры' : 'Избранное';
+            
+            var buttons = document.querySelectorAll('.nav-button');
+            for (var i = 0; i < buttons.length; i++) {
+                buttons[i].classList.remove('active');
+            }
+            
+            var activeIndex = 
+                page === 'home' ? 0 : 
+                page === 'search' ? 1 : 
+                page === 'filters' ? 2 : 3;
+            
+            buttons[activeIndex].classList.add('active');
+            
+            document.getElementById('debug').innerHTML += '<p>Переключено на: ' + page + '</p>';
+        }
+        
         function sendDebugInfo() {
             if (window.Telegram && window.Telegram.WebApp) {
                 var debugInfo = {
                     type: 'DEBUG_INFO',
                     userAgent: navigator.userAgent,
-                    viewportSize: {
+                    viewport: {
                         width: window.innerWidth,
                         height: window.innerHeight
                     },
-                    webAppParams: {
+                    webApp: {
                         version: window.Telegram.WebApp.version,
-                        viewportHeight: window.Telegram.WebApp.viewportHeight,
-                        isExpanded: window.Telegram.WebApp.isExpanded,
                         colorScheme: window.Telegram.WebApp.colorScheme,
-                        themeParams: window.Telegram.WebApp.themeParams,
-                        initData: window.Telegram.WebApp.initData
+                        isExpanded: window.Telegram.WebApp.isExpanded,
+                        viewportHeight: window.Telegram.WebApp.viewportHeight,
+                        viewportStableHeight: window.Telegram.WebApp.viewportStableHeight
                     }
                 };
                 
-                // Отправляем данные в бота
+                document.getElementById('debug').innerHTML += '<p>Отправка данных: ' + JSON.stringify(debugInfo) + '</p>';
+                
                 try {
                     window.Telegram.WebApp.sendData(JSON.stringify(debugInfo));
-                    alert('Отладочная информация отправлена!');
+                    alert('Отладочные данные отправлены в бот!');
                 } catch(e) {
                     alert('Ошибка отправки данных: ' + e.message);
+                    document.getElementById('debug').innerHTML += '<p style="color:red">Ошибка: ' + e.message + '</p>';
                 }
             } else {
                 alert('Telegram WebApp недоступен!');
             }
-        }
-        
-        // Тест навигации с нижней панелью
-        function testNavigation() {
-            document.body.innerHTML = `
-                <h1>Тест навигации</h1>
-                <div id="content">
-                    <p>Текущая страница: Главная</p>
-                </div>
-                <div style="position:fixed; bottom:0; left:0; right:0; display:flex; background:white; border-top:1px solid #ddd; height:60px;">
-                    <button style="flex:1; border:none; background:none; color:blue;" onclick="changePage('home')">Главная</button>
-                    <button style="flex:1; border:none; background:none;" onclick="changePage('search')">Поиск</button>
-                    <button style="flex:1; border:none; background:none;" onclick="changePage('favorites')">Избранное</button>
-                </div>
-                <button style="position:fixed; top:10px; right:10px; padding:5px;" onclick="goBack()">Назад</button>
-            `;
-        }
-        
-        function changePage(page) {
-            var content = document.getElementById('content');
-            if (!content) return;
-            
-            switch(page) {
-                case 'home':
-                    content.innerHTML = '<p>Текущая страница: Главная</p>';
-                    setActiveButton(0);
-                    break;
-                case 'search':
-                    content.innerHTML = '<p>Текущая страница: Поиск</p><input type="text" placeholder="Поиск..." style="width:100%; padding:10px; margin-top:10px;">';
-                    setActiveButton(1);
-                    break;
-                case 'favorites':
-                    content.innerHTML = '<p>Текущая страница: Избранное</p><p>Ваши избранные фильмы будут здесь.</p>';
-                    setActiveButton(2);
-                    break;
-            }
-        }
-        
-        function setActiveButton(index) {
-            var buttons = document.querySelectorAll('div[style*="position:fixed; bottom:0"] button');
-            for (var i = 0; i < buttons.length; i++) {
-                buttons[i].style.color = i === index ? 'blue' : '';
-            }
-        }
-        
-        function goBack() {
-            window.location.reload();
         }
     </script>
 </body>

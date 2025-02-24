@@ -1,96 +1,56 @@
 // src/hooks/useTelegram.js
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export function useTelegram() {
-  // Проверяем, доступен ли объект Telegram
-  const isWebAppAvailable = typeof window !== 'undefined' && 
-                           window.Telegram && 
-                           window.Telegram.WebApp;
+  const [colorScheme, setColorScheme] = useState('light');
   
-  // Если WebApp недоступен, создаем заглушку для тестирования вне Telegram
-  const tg = isWebAppAvailable 
-    ? window.Telegram.WebApp
-    : {
-        ready: () => console.log("Mock: WebApp ready called"),
-        expand: () => console.log("Mock: WebApp expand called"),
-        close: () => console.log("Mock: WebApp close called"),
-        sendData: (data) => console.log("Mock data sent:", data),
-        MainButton: {
-          text: "",
-          show: () => console.log("Mock: MainButton show"),
-          hide: () => console.log("Mock: MainButton hide"),
-          onClick: (cb) => console.log("Mock: MainButton onClick registered"),
-          offClick: () => console.log("Mock: MainButton offClick")
-        },
-        BackButton: {
-          show: () => console.log("Mock: BackButton show"),
-          hide: () => console.log("Mock: BackButton hide"),
-          onClick: (cb) => console.log("Mock: BackButton onClick registered")
-        },
-        colorScheme: "light",
-        themeParams: {
-          bg_color: "#ffffff",
-          text_color: "#000000",
-          button_color: "#40a7e3"
-        },
-        initDataUnsafe: {
-          user: {
-            id: 123456789,
-            username: "test_user"
-          }
-        }
-      };
-
+  // Проверяем доступность Telegram WebApp
+  const isWebAppAvailable = typeof window !== 'undefined' && 
+                             window.Telegram && 
+                             window.Telegram.WebApp;
+  
+  // Получаем объект WebApp, если он доступен
+  const tg = isWebAppAvailable ? window.Telegram.WebApp : null;
+  
   useEffect(() => {
-    // Инициализируем WebApp при монтировании компонента
-    if (isWebAppAvailable) {
+    if (tg) {
+      // Инициализируем WebApp
       tg.ready();
-      tg.expand();
-    }
-  }, [isWebAppAvailable]);
-
-  const onClose = () => {
-    if (isWebAppAvailable) {
-      tg.close();
+      
+      // Устанавливаем цветовую схему
+      setColorScheme(tg.colorScheme || 'light');
+      
+      // Подписываемся на изменение темы
+      const handleThemeChange = () => {
+        setColorScheme(tg.colorScheme || 'light');
+      };
+      
+      tg.onEvent('themeChanged', handleThemeChange);
+      
+      return () => {
+        tg.offEvent('themeChanged', handleThemeChange);
+      };
     } else {
-      console.log("Mock: WebApp close called");
+      // Если Telegram WebApp недоступен, используем светлую тему
+      setColorScheme('light');
     }
-  };
-
-  const showMainButton = (text, onClick) => {
-    if (isWebAppAvailable) {
-      tg.MainButton.text = text;
-      tg.MainButton.onClick(onClick);
-      tg.MainButton.show();
-    } else {
-      console.log(`Mock: MainButton show with text "${text}"`);
-    }
-  };
-
-  const hideMainButton = () => {
-    if (isWebAppAvailable) {
-      tg.MainButton.hide();
-    } else {
-      console.log("Mock: MainButton hide");
-    }
-  };
-
+  }, [tg]);
+  
+  // Функция для отправки данных обратно в бота
   const sendToBot = (data) => {
-    if (isWebAppAvailable) {
+    if (tg) {
       tg.sendData(JSON.stringify(data));
     } else {
-      console.log("Mock data sent to bot:", data);
+      console.log('Данные для бота:', data);
     }
   };
-
+  
   return {
-    onClose,
-    showMainButton,
-    hideMainButton,
     tg,
-    user: tg.initDataUnsafe?.user,
-    colorScheme: tg.colorScheme || 'light',
-    sendToBot,
-    isWebAppAvailable
+    isWebAppAvailable,
+    colorScheme,
+    sendToBot
   };
 }
+
+export default useTelegram;
