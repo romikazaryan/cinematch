@@ -497,3 +497,14 @@ telegram.error.NetworkError: httpx.RemoteProtocolError: Server disconnected with
 2025-02-22 12:05:34,571 - __main__ - ERROR - Ошибка обработки года для Бешеный конь: '<' not supported between instances of 'int' and 'str'
 2025-02-22 12:05:34,572 - __main__ - INFO - Найдено элементов после фильтрации: 0
 2025-02-22 12:05:34,771 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/editMessageText "HTTP/1.1 200 OK"
+2025-02-24 20:27:02,404 - __main__ - INFO - Bot started
+2025-02-24 20:27:03,821 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/getMe "HTTP/1.1 200 OK"
+2025-02-24 20:27:04,015 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/deleteWebhook "HTTP/1.1 200 OK"
+2025-02-24 20:27:04,018 - telegram.ext.Application - INFO - Application started
+2025-02-24 20:27:05,414 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/getUpdates "HTTP/1.1 200 OK"
+2025-02-24 20:27:15,554 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/getUpdates "HTTP/1.1 200 OK"
+2025-02-24 20:27:25,996 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/getUpdates "HTTP/1.1 200 OK"
+2025-02-24 20:27:36,191 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/getUpdates "HTTP/1.1 200 OK"
+2025-02-24 20:27:40,290 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8090553286:AAHKfSLPzAIMM6OiwUFfOnZgkZHdYQovIrs/getUpdates "HTTP/1.1 200 OK"
+2025-02-24 20:27:40,291 - telegram.ext.Application - INFO - Application is stopping. This might take a moment.
+2025-02-24 20:27:40,292 - telegram.ext.Application - INFO - Application.stop() complete
