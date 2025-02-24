@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Telegram WebApp</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 20px;
+            margin: 0;
+        }
+        .debug {
+            margin-top: 20px;
+            padding: 10px;
+            background: #f5f5f5;
+            font-size: 12px;
+            overflow: auto;
+        }
+        .nav {
+            display: flex;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid #ddd;
+            padding: 10px 0;
+        }
+        .nav-button {
+            flex: 1;
+            text-align: center;
+            padding: 5px;
+            border: none;
+            background: none;
+            cursor: pointer;
+        }
+        .active {
+            color: blue;
+        }
+    </style>
+</head>
+<body>
+    <h1>Telegram WebApp Test</h1>
+    <div id="content">
+        <p>Контент страницы</p>
+        <input type="text" placeholder="Тестовое поле ввода">
+    </div>
+    
+    <div class="nav">
+        <button class="nav-button active" onclick="showPage('home')">Главная</button>
+        <button class="nav-button" onclick="showPage('search')">Поиск</button>
+        <button class="nav-button" onclick="showPage('favorites')">Избранное</button>
+    </div>
+    
+    <div class="debug" id="debug">
+        <h3>Отладочная информация:</h3>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Собираем отладочную информацию
+            var debugInfo = {
+                userAgent: navigator.userAgent,
+                screenWidth: window.innerWidth,
+                screenHeight: window.innerHeight,
+                telegramAvailable: !!window.Telegram,
+                webAppAvailable: !!(window.Telegram && window.Telegram.WebApp)
+            };
+            
+            if (window.Telegram && window.Telegram.WebApp) {
+                debugInfo.webAppVersion = window.Telegram.WebApp.version;
+                debugInfo.themeParams = window.Telegram.WebApp.themeParams;
+                debugInfo.viewportHeight = window.Telegram.WebApp.viewportHeight;
+                debugInfo.isExpanded = window.Telegram.WebApp.isExpanded;
+                
+                // Инициализируем WebApp
+                window.Telegram.WebApp.ready();
+                window.Telegram.WebApp.expand();
+            }
+            
+            // Отображаем информацию
+            document.getElementById('debug').innerHTML += '<pre>' + JSON.stringify(debugInfo, null, 2) + '</pre>';
+        });
+        
+        function showPage(page) {
+            // Обновляем активную кнопку
+            var buttons = document.querySelectorAll('.nav-button');
+            buttons.forEach(function(btn) {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Обновляем контент
+            var content = document.getElementById('content');
+            switch(page) {
+                case 'home':
+                    content.innerHTML = '<p>Главная страница</p><div style="height:100px;background:#eee;margin:10px 0;display:flex;align-items:center;justify-content:center;">Контент главной</div>';
+                    break;
+                case 'search':
+                    content.innerHTML = '<p>Страница поиска</p><input type="text" placeholder="Поиск фильмов...">';
+                    break;
+                case 'favorites':
+                    content.innerHTML = '<p>Избранное</p><p>Здесь будут ваши избранные фильмы</p>';
+                    break;
+            }
+            
+            // Логируем действие
+            document.getElementById('debug').innerHTML += '<div>Переключена страница на: ' + page + '</div>';
+        }
+    </script>
+</body>
+</html>
