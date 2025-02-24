@@ -1,141 +1,49 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Тест Telegram WebApp</title>
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-      background-color: var(--tg-theme-bg-color, white);
-      color: var(--tg-theme-text-color, black);
-    }
-    
-    .container {
-      padding: 20px;
-    }
-    
-    .nav {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: white;
-      border-top: 1px solid #ddd;
-      display: flex;
-      justify-content: space-around;
-      padding: 10px 0;
-    }
-    
-    .nav-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-decoration: none;
-      color: #888;
-    }
-    
-    .nav-item.active {
-      color: #008cff;
-    }
-    
-    .debug {
-      margin-top: 40px;
-      padding: 10px;
-      background: #f5f5f5;
-      border-radius: 8px;
-      font-size: 12px;
-    }
-  </style>
+    <title>Минимальный тест</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body { padding: 20px; font-family: sans-serif; }
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            background: white;
+            border-top: 1px solid #ddd;
+            padding: 10px 0;
+        }
+        .nav-button {
+            flex: 1;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
     <h1>Тест Telegram WebApp</h1>
-    <p>Это тестовая страница для проверки работы Telegram WebApp</p>
+    <p>Если вы видите этот текст, базовое отображение работает.</p>
+    <input type="text" placeholder="Тестовое поле ввода" style="width:100%; padding:10px;">
     
-    <div id="content">
-      <p>Основное содержимое</p>
-      <input type="text" placeholder="Поиск фильмов..." style="width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 4px;">
+    <div class="bottom-nav">
+        <div class="nav-button">Главная</div>
+        <div class="nav-button">Поиск</div>
+        <div class="nav-button">Фильтры</div>
     </div>
     
-    <div class="debug">
-      <h3>Отладочная информация:</h3>
-      <div id="debug-info"></div>
-    </div>
-  </div>
-  
-  <div class="nav">
-    <a href="#" class="nav-item active" onclick="changePage('home')">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M9 22V12h6v10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      <span>Главная</span>
-    </a>
-    <a href="#" class="nav-item" onclick="changePage('search')">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M11 19a8 8 0 100-16 8 8 0 000 16z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      <span>Поиск</span>
-    </a>
-    <a href="#" class="nav-item" onclick="changePage('favorites')">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      <span>Избранное</span>
-    </a>
-  </div>
-
-  <script>
-    // Инициализация WebApp
-    document.addEventListener('DOMContentLoaded', function() {
-      // Проверка доступности Telegram WebApp
-      var debugInfo = {
-        telegramAvailable: !!window.Telegram,
-        webAppAvailable: !!(window.Telegram && window.Telegram.WebApp),
-        userAgent: navigator.userAgent
-      };
-      
-      if (window.Telegram && window.Telegram.WebApp) {
-        // Инициализируем WebApp
-        window.Telegram.WebApp.ready();
-        window.Telegram.WebApp.expand();
-        
-        debugInfo.webAppInitialized = true;
-        debugInfo.colorScheme = window.Telegram.WebApp.colorScheme;
-        debugInfo.themeParams = window.Telegram.WebApp.themeParams;
-      }
-      
-      // Отображаем отладочную информацию
-      document.getElementById('debug-info').textContent = JSON.stringify(debugInfo, null, 2);
-    });
-    
-    // Функция для переключения между страницами
-    function changePage(page) {
-      var navItems = document.querySelectorAll('.nav-item');
-      navItems.forEach(function(item) {
-        item.classList.remove('active');
-      });
-      
-      event.currentTarget.classList.add('active');
-      
-      var content = document.getElementById('content');
-      switch (page) {
-        case 'home':
-          content.innerHTML = '<p>Основное содержимое главной страницы</p>';
-          break;
-        case 'search':
-          content.innerHTML = '<p>Страница поиска</p><input type="text" placeholder="Поиск фильмов..." style="width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 4px;">';
-          break;
-        case 'favorites':
-          content.innerHTML = '<p>Страница избранного</p><p>Здесь будут ваши избранные фильмы.</p>';
-          break;
-      }
-    }
-  </script>
+    <script>
+        // Самая базовая инициализация
+        if (window.Telegram && window.Telegram.WebApp) {
+            window.Telegram.WebApp.ready();
+            window.Telegram.WebApp.expand();
+            
+            document.body.innerHTML += '<p style="color:green">WebApp инициализирован!</p>';
+        } else {
+            document.body.innerHTML += '<p style="color:red">WebApp НЕ найден</p>';
+        }
+    </script>
 </body>
 </html>
